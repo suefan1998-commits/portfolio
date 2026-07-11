@@ -61,6 +61,7 @@ PDF_DIR = OUTPUT / "pdf"
 TMP = WORK / "tmp"
 NODE = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node")
 NODE_MODULES = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules")
+PNPM = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback/pnpm")
 WORKBOOK_TOOLS = ROOT / "scripts" / "workbook_tools.mjs"
 
 REQUIRED_HEADERS = [
@@ -1453,11 +1454,27 @@ def deploy_vercel() -> None:
     if not index.exists():
         raise SystemExit("网站生成失败：未找到 output/site/index.html。")
 
-    npx = shutil.which("npx")
-    if not npx:
-        raise SystemExit("找不到 npx。也可以进入 Vercel Drop 手动上传 output/site/ 文件夹。")
+    vercel_output = ROOT / ".vercel" / "output"
+    static_output = vercel_output / "static"
+    if static_output.exists():
+        shutil.rmtree(static_output)
+    static_output.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(PUBLIC, static_output, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".vercel", "output"))
+    (vercel_output / "config.json").write_text('{"version":3}\n', encoding="utf-8")
 
-    subprocess.run([npx, "vercel", "--prod", str(PUBLIC)], cwd=ROOT, check=True)
+    env = os.environ.copy()
+    if NODE.exists():
+        env["PATH"] = f"{NODE.parent}:{env.get('PATH', '')}"
+
+    npx = shutil.which("npx")
+    if npx:
+        command = [npx, "vercel", "deploy", "--prebuilt", "--prod"]
+    elif PNPM.exists():
+        command = [str(PNPM), "dlx", "vercel", "deploy", "--prebuilt", "--prod"]
+    else:
+        raise SystemExit("找不到 Vercel CLI。也可以进入 Vercel Drop 手动上传 output/site/ 文件夹。")
+
+    subprocess.run(command, cwd=ROOT, env=env, check=True)
 
 
 def site_nav(asset_prefix: str, active: str) -> str:
