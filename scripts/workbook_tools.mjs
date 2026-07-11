@@ -22,11 +22,11 @@ const STATUS_VALUES = ["待处理", "已入库", "需手动补充", "错误"];
 const SOURCE_VALUES = ["新媒体", "纸刊"];
 const PUBLIC_VALUES = ["是", "否"];
 const WRITING_TYPE_VALUES = [
-  "人物与访谈（Profiles & Interviews）",
-  "城市、旅行与生活方式（Travel & Lifestyle）",
-  "设计、建筑与文化（Design Architecture & Culture）",
-  "商业、科技与社会（Business Technology & Society）",
-  "品牌特稿（Brand Features）",
+  "人物与访谈",
+  "城市、旅行与生活方式",
+  "设计、建筑与文化",
+  "商业、科技与社会",
+  "品牌特稿",
 ];
 
 async function createTemplate(outputPath) {
@@ -99,7 +99,7 @@ async function createTemplate(outputPath) {
     ["标题", "可留空；新媒体链接会尽量从网页标题提取，纸刊文件名会作为兜底标题。"],
     ["来源类型", "填写“新媒体”或“纸刊”。"],
     ["链接/文件名", "新媒体填链接；纸刊填 inbox 文件夹内的文件名。"],
-    ["撰稿类型", "主分类，例如文旅、人物、品牌、评论、报道。"],
+    ["撰稿类型", "主分类，例如人物与访谈、城市、旅行与生活方式、设计、建筑与文化、商业、科技与社会、品牌特稿。"],
     ["主题标签", "辅助筛选标签，多个标签用顿号、逗号或分号分隔。"],
     ["发布媒体", "填写发布平台、刊物或客户名称。"],
     ["发布日期", "建议使用 yyyy-mm-dd。"],

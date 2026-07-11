@@ -1972,6 +1972,11 @@ def write_css() -> None:
           line-height: 1.9;
           margin: 1em 0;
         }
+        .selected-layout .summary {
+          color: var(--muted);
+          font-size: 14px;
+          line-height: 1.75;
+        }
         .archive-controls {
           display: grid;
           grid-template-columns: minmax(0, 1fr) auto;
@@ -1983,7 +1988,7 @@ def write_css() -> None:
         .type-filter-group {
           display: flex;
           flex-wrap: wrap;
-          gap: 14px;
+          gap: 16px 22px;
         }
         .view-toggle {
           display: flex;
@@ -2482,7 +2487,11 @@ def display_writing_type(value: object) -> str:
 def make_excerpt(article: dict, query: str, limit: int = 420) -> str:
     body = article.get("body", "")
     keywords = keywords_from_query(query)
-    paragraphs = [p.strip() for p in body.split("\n\n") if p.strip()]
+    paragraphs = [
+        p.strip()
+        for p in body.split("\n\n")
+        if p.strip() and not re.match(r"^\s{0,3}#{1,6}\s+", p.strip())
+    ]
     for keyword in keywords:
         for paragraph in paragraphs:
             if keyword in paragraph:

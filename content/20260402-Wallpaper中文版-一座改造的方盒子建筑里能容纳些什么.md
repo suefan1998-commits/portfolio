@@ -1,6 +1,6 @@
 ---
 id: "20260402-Wallpaper中文版-一座改造的方盒子建筑里能容纳些什么"
-title: "一座改造的方盒子建筑里能容纳些什么？"
+title: "YEARLY PLAN｜一座改造的方盒子建筑里能容纳些什么？"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/uqd6BPnqLlvfQ2mdcEo0Tg"
 writing_type: "品牌特稿（Brand Features）"

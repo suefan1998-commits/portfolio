@@ -1,6 +1,6 @@
 ---
 id: "20260709-Wallpaper中文版-Wallpaper独家底特律没有奇迹"
-title: "Wallpaper独家｜底特律没有奇迹。"
+title: "底特律没有奇迹"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/lFshjuks8-zl78NBn35EiA"
 writing_type: "设计、建筑与文化（Design Architecture & Culture）"

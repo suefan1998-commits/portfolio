@@ -1,6 +1,6 @@
 ---
 id: "20250531-Wallpaper中文版-2025年LOEWE工艺奖专题报道手工艺从来不是只关乎手"
-title: "2025年LOEWE工艺奖专题报道｜手工艺，从来不是只关乎手"
+title: "2025年LOEWE工艺奖｜手工艺，从来不是只关乎手"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/aItKASb5uAIZUKXAKHCkLg"
 writing_type: "设计、建筑与文化（Design Architecture & Culture）"

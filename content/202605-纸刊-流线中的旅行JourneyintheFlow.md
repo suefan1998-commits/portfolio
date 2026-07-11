@@ -1,6 +1,6 @@
 ---
 id: "202605-纸刊-流线中的旅行JourneyintheFlow"
-title: "流线中的旅行 Journey in the Flow"
+title: "LV｜流线中的旅行"
 source_type: "纸刊"
 source: "202605-纸刊-流线中的旅行JourneyintheFlow"
 writing_type: "品牌特稿（Brand Features）"
