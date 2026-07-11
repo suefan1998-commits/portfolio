@@ -1,0 +1,153 @@
+            <!doctype html>
+            <html lang="zh-CN">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>联系方式 - Su FAN</title>
+              <link rel="stylesheet" href="assets/site.css">
+              <script>
+                (() => {
+                  const stored = localStorage.getItem("portfolio-theme");
+                  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  document.documentElement.dataset.theme = stored || (prefersDark ? "dark" : "light");
+                })();
+              </script>
+            </head>
+            <body>
+              <header class="site-header">
+      <a class="brand" href="index.html">Su FAN, 自由撰稿人</a>
+      <nav class="main-nav" aria-label="主导航">
+        <a class="nav-link" href="about.html">关于我</a>
+<a class="nav-link" href="selected.html">精选作品</a>
+<a class="nav-link" href="archive.html">作品总览</a>
+<a class="nav-link is-active" href="contact.html">联系方式</a>
+        <button class="theme-toggle" type="button" aria-label="切换明暗模式" aria-pressed="false">
+          <span class="theme-symbol" aria-hidden="true">☀️</span>
+          <span class="visually-hidden">切换明暗模式</span>
+        </button>
+      </nav>
+    </header>
+              <div class="shell">
+                <section class="page-title contact-title">
+  <p>Contact</p>
+  <h1>联系方式</h1>
+  <div class="intro-copy">欢迎联络洽谈合作。</div>
+</section>
+<section class="contact-grid">
+  <div class="contact-block">
+    <span>联系方式</span>
+    <div class="social-list">
+      <a class="social-item" href="mailto:sue_fan1998@163.com">
+        <img src="assets/media/email-bca2507b.png" alt="Email" loading="lazy">
+        <span>sue_fan1998@163.com</span>
+      </a>
+      <button class="social-item copy-social" type="button" data-copy="admin_sue">
+        <img src="assets/media/5fae-4fe1-22cae8c9.png" alt="微信" loading="lazy">
+        <span>admin_sue</span>
+      </button>
+    </div>
+  </div>
+  <div class="contact-block">
+    <span>所在城市</span>
+    <p>北京（接受线上办公与差旅）</p>
+  </div>
+  <div class="contact-block">
+    <span>社交媒体</span>
+    <div class="social-list">
+      <a class="social-item" href="https://www.xiaohongshu.com/user/profile/5bfe22e351783a3f10144fe4" target="_blank" rel="noopener noreferrer">
+        <img src="assets/media/5c0f-7ea2-4e66-840309d0.png" alt="小红书" loading="lazy">
+        <span>小红书 @Susu树树，分享日常写作与作品心得</span>
+      </a>
+      <a class="social-item" href="https://mp.weixin.qq.com/s/-5Cek0RtiWKjwVZ0lsGXxw" target="_blank" rel="noopener noreferrer">
+        <img src="assets/media/myquietdraft-524b41fa.jpg" alt="MyQuietDraft" loading="lazy">
+        <span>公众号 @MyQuietDraft，分享自由职业与创作体悟</span>
+      </a>
+    </div>
+  </div>
+  <div class="contact-block">
+    <span>作品集</span>
+    <div class="social-list"><a class="social-item" href="assets/20260710-SuFAN全部作品集.pdf" download><img src="assets/media/pdficon-ff820fce.png" alt="PDF" loading="lazy"><span>下载最新作品集</span></a></div>
+  </div>
+</section>
+              </div>
+              <script>
+(() => {
+  const root = document.documentElement;
+  const stored = localStorage.getItem("portfolio-theme");
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const initial = stored || (prefersDark ? "dark" : "light");
+  const button = document.querySelector(".theme-toggle");
+  const setTheme = (theme) => {
+    root.dataset.theme = theme;
+    if (button) {
+      button.dataset.theme = theme;
+      const symbol = button.querySelector(".theme-symbol");
+      if (symbol) symbol.textContent = theme === "dark" ? "🌙" : "☀️";
+      button.setAttribute("aria-label", theme === "dark" ? "切换到 Light Mode" : "切换到 Dark Mode");
+      button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    }
+  };
+  setTheme(initial);
+  button?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("portfolio-theme", next);
+    setTheme(next);
+  });
+
+  document.querySelectorAll(".copy-social").forEach((copyButton) => {
+    copyButton.addEventListener("click", async () => {
+      const text = copyButton.dataset.copy || "";
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyButton.dataset.copied = "true";
+        window.setTimeout(() => {
+          copyButton.dataset.copied = "false";
+        }, 1400);
+      } catch (error) {
+        copyButton.dataset.copied = "false";
+      }
+    });
+  });
+
+  const archive = document.querySelector(".archive-title");
+  if (!archive) return;
+  const typeButtons = Array.from(document.querySelectorAll(".type-filter"));
+  const viewButtons = Array.from(document.querySelectorAll(".view-button"));
+  const panels = Array.from(document.querySelectorAll("[data-view-panel]"));
+  const items = Array.from(document.querySelectorAll("[data-work-type]"));
+
+  typeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const type = button.dataset.type || "all";
+      typeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+      items.forEach((item) => {
+        item.hidden = type !== "all" && item.dataset.workType !== type;
+      });
+      const url = new URL(window.location.href);
+      if (type === "all") {
+        url.searchParams.delete("type");
+      } else {
+        url.searchParams.set("type", type);
+      }
+      window.history.replaceState({}, "", url);
+    });
+  });
+
+  viewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.view || "grid";
+      viewButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.viewPanel === view));
+    });
+  });
+
+  const initialType = new URLSearchParams(window.location.search).get("type");
+  if (initialType) {
+    const target = typeButtons.find((button) => button.dataset.type === initialType);
+    target?.click();
+  }
+})();
+</script>
+            </body>
+            </html>

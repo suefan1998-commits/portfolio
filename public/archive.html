@@ -1,0 +1,798 @@
+            <!doctype html>
+            <html lang="zh-CN">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>作品总览 - Su FAN</title>
+              <link rel="stylesheet" href="assets/site.css">
+              <script>
+                (() => {
+                  const stored = localStorage.getItem("portfolio-theme");
+                  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+                  document.documentElement.dataset.theme = stored || (prefersDark ? "dark" : "light");
+                })();
+              </script>
+            </head>
+            <body>
+              <header class="site-header">
+      <a class="brand" href="index.html">Su FAN, 自由撰稿人</a>
+      <nav class="main-nav" aria-label="主导航">
+        <a class="nav-link" href="about.html">关于我</a>
+<a class="nav-link" href="selected.html">精选作品</a>
+<a class="nav-link is-active" href="archive.html">作品总览</a>
+<a class="nav-link" href="contact.html">联系方式</a>
+        <button class="theme-toggle" type="button" aria-label="切换明暗模式" aria-pressed="false">
+          <span class="theme-symbol" aria-hidden="true">☀️</span>
+          <span class="visually-hidden">切换明暗模式</span>
+        </button>
+      </nav>
+    </header>
+              <div class="shell">
+                <section class="page-title archive-title">
+          <p>Archive</p>
+          <h1>作品总览</h1>
+          <div class="intro-copy">2025年至今完整发布作品总览，含新媒体发布与纸刊发布。</div>
+        </section>
+        <section class="archive-controls" aria-label="作品筛选与视图切换">
+          <div class="type-filter-group">
+            <button class="type-filter is-active" type="button" data-type="all">全部</button>
+            <button class="type-filter" type="button" data-type="人物与访谈">人物与访谈</button>
+<button class="type-filter" type="button" data-type="城市、旅行与生活方式">城市、旅行与生活方式</button>
+<button class="type-filter" type="button" data-type="设计、建筑与文化">设计、建筑与文化</button>
+<button class="type-filter" type="button" data-type="商业、科技与社会">商业、科技与社会</button>
+<button class="type-filter" type="button" data-type="品牌特稿">品牌特稿</button>
+          </div>
+          <div class="view-toggle" aria-label="浏览模式">
+            <button class="view-button is-active" type="button" data-view="grid"><span class="view-icon view-icon-grid" aria-hidden="true"></span><span class="visually-hidden">Grid View</span></button>
+            <button class="view-button" type="button" data-view="list"><span class="view-icon view-icon-list" aria-hidden="true"></span><span class="visually-hidden">List View</span></button>
+          </div>
+        </section>
+        <section class="archive-view archive-grid-view is-active" data-view-panel="grid">
+    <article class="work-card" data-work-type="人物与访谈">
+      <a class="work-card-image" href="articles/20260629-男人风尚-在场者廿四载他在南浔筑起一座数万平方米的精神原乡.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260629-3847bc24.jpg" alt="在场者｜廿四载，他在南浔筑起一座数万平方米的精神原乡" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">人物与访谈</p>
+        <h2><a href="articles/20260629-男人风尚-在场者廿四载他在南浔筑起一座数万平方米的精神原乡.html">在场者｜廿四载，他在南浔筑起一座数万平方米的精神原乡</a></h2>
+        <p class="card-meta-line">男人风尚｜2026.06.29</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="人物与访谈">
+      <a class="work-card-image" href="articles/20260301-生活力场-高原日记造物的玉树女人.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260301-4f6a043d.jpeg" alt="高原日记：造物的玉树女人" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">人物与访谈</p>
+        <h2><a href="articles/20260301-生活力场-高原日记造物的玉树女人.html">高原日记：造物的玉树女人</a></h2>
+        <p class="card-meta-line">生活力场｜2026.03.01</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20260703-悦游CNTraveler-比清迈和巴厘岛更夯的旅居地藏在南亚的雪山下.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260703-cntraveler-2edf366b.jpg" alt="比清迈和巴厘岛更夯的旅居地，藏在南亚的雪山下" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20260703-悦游CNTraveler-比清迈和巴厘岛更夯的旅居地藏在南亚的雪山下.html">比清迈和巴厘岛更夯的旅居地，藏在南亚的雪山下</a></h2>
+        <p class="card-meta-line">悦游CNTraveler｜2026.07.03</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20260511-悦游CNTraveler-直飞开通在即带上耳朵进入这座南欧最夯首都.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260511-cntraveler-2e6dff88.jpg" alt="直飞开通在即！带上耳朵，进入这座南欧最夯首都" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20260511-悦游CNTraveler-直飞开通在即带上耳朵进入这座南欧最夯首都.html">直飞开通在即！带上耳朵，进入这座南欧最夯首都</a></h2>
+        <p class="card-meta-line">悦游CNTraveler｜2026.05.11</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20260410-悦游CNTraveler-抛弃巴厘岛和清迈数字游民们集体奔向第比利斯.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260410-cntraveler-4e83d3a0.jpg" alt="抛弃巴厘岛和清迈，数字游民们集体奔向第比利斯" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20260410-悦游CNTraveler-抛弃巴厘岛和清迈数字游民们集体奔向第比利斯.html">抛弃巴厘岛和清迈，数字游民们集体奔向第比利斯</a></h2>
+        <p class="card-meta-line">悦游CNTraveler｜2026.04.10</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20251202-目的地Lab-厚重历史城市的更新有没有可能举重若轻.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20251202-lab-901d4e0e.jpg" alt="厚重历史城市的更新，有没有可能举重若轻？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20251202-目的地Lab-厚重历史城市的更新有没有可能举重若轻.html">厚重历史城市的更新，有没有可能举重若轻？</a></h2>
+        <p class="card-meta-line">目的地Lab｜2025.12.02</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20251105-目的地Lab-格罗宁根论坛小城建大型文化综合体是怎样的一场豪赌.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20251105-lab-a07baf00.png" alt="格罗宁根「论坛」：小城建大型文化综合体，是怎样的一场豪赌？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20251105-目的地Lab-格罗宁根论坛小城建大型文化综合体是怎样的一场豪赌.html">格罗宁根「论坛」：小城建大型文化综合体，是怎样的一场豪赌？</a></h2>
+        <p class="card-meta-line">目的地Lab｜2025.11.05</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="城市、旅行与生活方式">
+      <a class="work-card-image" href="articles/20250806-目的地Lab-手工艺文旅能否成为地方破局之路.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250806-lab-06e1ccce.jpg" alt="手工艺+文旅，能否成为地方破局之路？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h2><a href="articles/20250806-目的地Lab-手工艺文旅能否成为地方破局之路.html">手工艺+文旅，能否成为地方破局之路？</a></h2>
+        <p class="card-meta-line">目的地Lab｜2025.08.06</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/20260709-Wallpaper中文版-Wallpaper独家底特律没有奇迹.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260709-wallpaper-472343ee.jpg" alt="Wallpaper独家｜底特律没有奇迹。" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/20260709-Wallpaper中文版-Wallpaper独家底特律没有奇迹.html">Wallpaper独家｜底特律没有奇迹。</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.07.09</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/20260325-Wallpaper中文版-当人们涌向雪山这间酒店选择退后一步.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260325-wallpaper-7cc1419c.webp" alt="当人们涌向雪山，这间酒店选择“退后一步”" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/20260325-Wallpaper中文版-当人们涌向雪山这间酒店选择退后一步.html">当人们涌向雪山，这间酒店选择“退后一步”</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.03.25</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/20260108-Wallpaper中文版-委内瑞拉怎么了我们从螺旋大厦讲起.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260108-wallpaper-63badfae.jpg" alt="委内瑞拉怎么了？我们从螺旋大厦讲起" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/20260108-Wallpaper中文版-委内瑞拉怎么了我们从螺旋大厦讲起.html">委内瑞拉怎么了？我们从螺旋大厦讲起</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.01.08</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/20250531-Wallpaper中文版-2025年LOEWE工艺奖专题报道手工艺从来不是只关乎手.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250531-wallpaper-9aa63c90.png" alt="2025年LOEWE工艺奖专题报道｜手工艺，从来不是只关乎手" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/20250531-Wallpaper中文版-2025年LOEWE工艺奖专题报道手工艺从来不是只关乎手.html">2025年LOEWE工艺奖专题报道｜手工艺，从来不是只关乎手</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.05.31</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/20250504-Wallpaper中文版-巴西大使夫人如何用设计和收藏布置她的家.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250504-wallpaper-c0923a41.webp" alt="巴西大使夫人如何用设计和收藏布置她的家？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/20250504-Wallpaper中文版-巴西大使夫人如何用设计和收藏布置她的家.html">巴西大使夫人如何用设计和收藏布置她的家？</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.05.04</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="设计、建筑与文化">
+      <a class="work-card-image" href="articles/202502-纸刊-专访艺术家黄婉冰交织与共融.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/202501-wallpaper-e6c6d3cf.png" alt="专访艺术家黄婉冰｜交织与共融" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">设计、建筑与文化</p>
+        <h2><a href="articles/202502-纸刊-专访艺术家黄婉冰交织与共融.html">专访艺术家黄婉冰｜交织与共融</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.02</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20260601-ELLEMEN睿士-在硅谷待了十年后我决定卖掉千万房产回国.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260601-ellemen-78636880.png" alt="“在硅谷待了十年后，我决定卖掉千万房产回国”" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20260601-ELLEMEN睿士-在硅谷待了十年后我决定卖掉千万房产回国.html">“在硅谷待了十年后，我决定卖掉千万房产回国”</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.06.01</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20260310-ELLEMEN睿士-那些在迪拜买房的中国人从阳台看见导弹碎片坠落.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260310-ellemen-44d43c79.png" alt="那些在迪拜买房的中国人：从阳台看见导弹碎片坠落" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20260310-ELLEMEN睿士-那些在迪拜买房的中国人从阳台看见导弹碎片坠落.html">那些在迪拜买房的中国人：从阳台看见导弹碎片坠落</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.03.10</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20260225-ELLEMEN睿士-国内中产放弃加拿大留学移民跳板正在失灵.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260225-ellemen-3b88a392.png" alt="国内中产放弃加拿大留学，移民跳板正在失灵？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20260225-ELLEMEN睿士-国内中产放弃加拿大留学移民跳板正在失灵.html">国内中产放弃加拿大留学，移民跳板正在失灵？</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.02.25</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20260115-ELLEMEN睿士-港漂开始在香港考公稳定成了年轻人的生存共识.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260105-ellemen-ff7ef726.png" alt="港漂开始在香港考公，稳定成了年轻人的生存共识" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20260115-ELLEMEN睿士-港漂开始在香港考公稳定成了年轻人的生存共识.html">港漂开始在香港考公，稳定成了年轻人的生存共识</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.01.15</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20251105-ELLEMEN睿士-硅谷开启第二轮大裁员掌控AI的人正在职场洗牌.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20251105-ellemen-9c5da94c.png" alt="硅谷开启第二轮大裁员：（掌控）AI（的人）正在职场“洗牌”" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20251105-ELLEMEN睿士-硅谷开启第二轮大裁员掌控AI的人正在职场洗牌.html">硅谷开启第二轮大裁员：（掌控）AI（的人）正在职场“洗牌”</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.11.05</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20251011-ELLEMEN睿士-一半高才离开为什么香港留不住内地精英.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20251011-ellemen-538856ba.png" alt="一半高才离开：为什么香港留不住内地精英？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20251011-ELLEMEN睿士-一半高才离开为什么香港留不住内地精英.html">一半高才离开：为什么香港留不住内地精英？</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.10.11</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="商业、科技与社会">
+      <a class="work-card-image" href="articles/20250902-ELLEMEN睿士-轻医美上瘾后一个中产女孩的生活面临失控.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250902-ellemen-b0b73c8f.png" alt="轻医美上瘾后，一个中产女孩的生活面临失控" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">商业、科技与社会</p>
+        <h2><a href="articles/20250902-ELLEMEN睿士-轻医美上瘾后一个中产女孩的生活面临失控.html">轻医美上瘾后，一个中产女孩的生活面临失控</a></h2>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.09.02</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/202605-纸刊-流线中的旅行JourneyintheFlow.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/202605-wallpaper-cfe6ffaa.png" alt="流线中的旅行 Journey in the Flow" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/202605-纸刊-流线中的旅行JourneyintheFlow.html">流线中的旅行 Journey in the Flow</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.05</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20260402-Wallpaper中文版-一座改造的方盒子建筑里能容纳些什么.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260402-wallpaper-64c4b2a2.jpg" alt="一座改造的方盒子建筑里能容纳些什么？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20260402-Wallpaper中文版-一座改造的方盒子建筑里能容纳些什么.html">一座改造的方盒子建筑里能容纳些什么？</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.04.02</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20260225-Wallpaper中文版-AI时代我们为什么还需要实体家具展.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260225-wallpaper-77d44684.png" alt="AI时代，我们为什么还需要实体家具展？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20260225-Wallpaper中文版-AI时代我们为什么还需要实体家具展.html">AI时代，我们为什么还需要实体家具展？</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.02.25</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20250926-Wallpaper中文版-MolteniC一座百年宫殿如何通过设计重生.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250926-wallpaper-c377d684.webp" alt="Molteni&amp;C｜一座百年宫殿如何通过设计重生？" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20250926-Wallpaper中文版-MolteniC一座百年宫殿如何通过设计重生.html">Molteni&amp;C｜一座百年宫殿如何通过设计重生？</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.09.26</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20250830-Wallpaper-诺乐工坊牧区的不迎合一种新的城市性品牌空间.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250830-wallpaper-31a908ad.webp" alt="诺乐工坊｜牧区的“不迎合”：一种新的城市性品牌空间" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20250830-Wallpaper-诺乐工坊牧区的不迎合一种新的城市性品牌空间.html">诺乐工坊｜牧区的“不迎合”：一种新的城市性品牌空间</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.08.30</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/202506-纸刊-UrbanFabricRugs韵脚.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/202506-wallpaper-3daa6cad.png" alt="Urban Fabric Rugs｜韵脚" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/202506-纸刊-UrbanFabricRugs韵脚.html">Urban Fabric Rugs｜韵脚</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.06</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20250318-Wallpaper-Aesop伊索海南店南海之畔的藻影浮光.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20250318-wallpaper-48e11f43.png" alt="Aesop伊索海南店｜南海之畔的藻影浮光" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20250318-Wallpaper-Aesop伊索海南店南海之畔的藻影浮光.html">Aesop伊索海南店｜南海之畔的藻影浮光</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.03.18</p>
+      </div>
+    </article>
+
+
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/202501-纸刊-路易威登村上隆超越二十年.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/202501-wallpaper-5f657c3b.png" alt="路易威登×村上隆｜超越二十年" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/202501-纸刊-路易威登村上隆超越二十年.html">路易威登×村上隆｜超越二十年</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2025.01</p>
+      </div>
+    </article>
+    </section>
+        <section class="archive-view archive-list-view" data-view-panel="list"><div class="archive-list">
+    <article class="archive-item" data-work-type="人物与访谈">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260629-3847bc24.jpg" alt="在场者｜廿四载，他在南浔筑起一座数万平方米的精神原乡" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">人物与访谈</p>
+        <h3><a href="articles/20260629-男人风尚-在场者廿四载他在南浔筑起一座数万平方米的精神原乡.html">在场者｜廿四载，他在南浔筑起一座数万平方米的精神原乡</a></h3>
+        <p class="card-meta-line">男人风尚｜2026.06.29</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/V9UaSe9JgIlZR47shnOwVQ" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="人物与访谈">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260301-4f6a043d.jpeg" alt="高原日记：造物的玉树女人" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">人物与访谈</p>
+        <h3><a href="articles/20260301-生活力场-高原日记造物的玉树女人.html">高原日记：造物的玉树女人</a></h3>
+        <p class="card-meta-line">生活力场｜2026.03.01</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/dRNfZsMNqCQV64yMMcNISQ" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260703-cntraveler-2edf366b.jpg" alt="比清迈和巴厘岛更夯的旅居地，藏在南亚的雪山下" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20260703-悦游CNTraveler-比清迈和巴厘岛更夯的旅居地藏在南亚的雪山下.html">比清迈和巴厘岛更夯的旅居地，藏在南亚的雪山下</a></h3>
+        <p class="card-meta-line">悦游CNTraveler｜2026.07.03</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/avUWE9pPGWFJagT--NQeiA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260511-cntraveler-2e6dff88.jpg" alt="直飞开通在即！带上耳朵，进入这座南欧最夯首都" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20260511-悦游CNTraveler-直飞开通在即带上耳朵进入这座南欧最夯首都.html">直飞开通在即！带上耳朵，进入这座南欧最夯首都</a></h3>
+        <p class="card-meta-line">悦游CNTraveler｜2026.05.11</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/vZXXtnQycRFfxpibtsoylw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260410-cntraveler-4e83d3a0.jpg" alt="抛弃巴厘岛和清迈，数字游民们集体奔向第比利斯" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20260410-悦游CNTraveler-抛弃巴厘岛和清迈数字游民们集体奔向第比利斯.html">抛弃巴厘岛和清迈，数字游民们集体奔向第比利斯</a></h3>
+        <p class="card-meta-line">悦游CNTraveler｜2026.04.10</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/xfiOvjpS-OrCloZBMuajjA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20251202-lab-901d4e0e.jpg" alt="厚重历史城市的更新，有没有可能举重若轻？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20251202-目的地Lab-厚重历史城市的更新有没有可能举重若轻.html">厚重历史城市的更新，有没有可能举重若轻？</a></h3>
+        <p class="card-meta-line">目的地Lab｜2025.12.02</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/BUWEM-F3gclJ939E9WUgIQ" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20251105-lab-a07baf00.png" alt="格罗宁根「论坛」：小城建大型文化综合体，是怎样的一场豪赌？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20251105-目的地Lab-格罗宁根论坛小城建大型文化综合体是怎样的一场豪赌.html">格罗宁根「论坛」：小城建大型文化综合体，是怎样的一场豪赌？</a></h3>
+        <p class="card-meta-line">目的地Lab｜2025.11.05</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/vOijRmxaJcShfF7HqKugWw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="城市、旅行与生活方式">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250806-lab-06e1ccce.jpg" alt="手工艺+文旅，能否成为地方破局之路？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">城市、旅行与生活方式</p>
+        <h3><a href="articles/20250806-目的地Lab-手工艺文旅能否成为地方破局之路.html">手工艺+文旅，能否成为地方破局之路？</a></h3>
+        <p class="card-meta-line">目的地Lab｜2025.08.06</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/AS-gPGhU2cO9jOvAJ_daiA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260709-wallpaper-472343ee.jpg" alt="Wallpaper独家｜底特律没有奇迹。" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/20260709-Wallpaper中文版-Wallpaper独家底特律没有奇迹.html">Wallpaper独家｜底特律没有奇迹。</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.07.09</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/lFshjuks8-zl78NBn35EiA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260325-wallpaper-7cc1419c.webp" alt="当人们涌向雪山，这间酒店选择“退后一步”" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/20260325-Wallpaper中文版-当人们涌向雪山这间酒店选择退后一步.html">当人们涌向雪山，这间酒店选择“退后一步”</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.03.25</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/BzT048FmW1Sah0L-fqiwiQ" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260108-wallpaper-63badfae.jpg" alt="委内瑞拉怎么了？我们从螺旋大厦讲起" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/20260108-Wallpaper中文版-委内瑞拉怎么了我们从螺旋大厦讲起.html">委内瑞拉怎么了？我们从螺旋大厦讲起</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.01.08</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/C8SbmROJ-mJ4KXVM8AVpOA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250531-wallpaper-9aa63c90.png" alt="2025年LOEWE工艺奖专题报道｜手工艺，从来不是只关乎手" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/20250531-Wallpaper中文版-2025年LOEWE工艺奖专题报道手工艺从来不是只关乎手.html">2025年LOEWE工艺奖专题报道｜手工艺，从来不是只关乎手</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.05.31</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/aItKASb5uAIZUKXAKHCkLg" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250504-wallpaper-c0923a41.webp" alt="巴西大使夫人如何用设计和收藏布置她的家？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/20250504-Wallpaper中文版-巴西大使夫人如何用设计和收藏布置她的家.html">巴西大使夫人如何用设计和收藏布置她的家？</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.05.04</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/hdJ_A7wYdlCKhv5brj67-Q" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="设计、建筑与文化">
+      <figure class="archive-image"><img class="image-main" src="assets/media/202501-wallpaper-e6c6d3cf.png" alt="专访艺术家黄婉冰｜交织与共融" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">设计、建筑与文化</p>
+        <h3><a href="articles/202502-纸刊-专访艺术家黄婉冰交织与共融.html">专访艺术家黄婉冰｜交织与共融</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.02</p>
+
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260601-ellemen-78636880.png" alt="“在硅谷待了十年后，我决定卖掉千万房产回国”" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20260601-ELLEMEN睿士-在硅谷待了十年后我决定卖掉千万房产回国.html">“在硅谷待了十年后，我决定卖掉千万房产回国”</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.06.01</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/RPmDW4l1uex0h5iOWUeNTA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260310-ellemen-44d43c79.png" alt="那些在迪拜买房的中国人：从阳台看见导弹碎片坠落" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20260310-ELLEMEN睿士-那些在迪拜买房的中国人从阳台看见导弹碎片坠落.html">那些在迪拜买房的中国人：从阳台看见导弹碎片坠落</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.03.10</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/wsiW8A5-3xB79kuyEFCpJg" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260225-ellemen-3b88a392.png" alt="国内中产放弃加拿大留学，移民跳板正在失灵？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20260225-ELLEMEN睿士-国内中产放弃加拿大留学移民跳板正在失灵.html">国内中产放弃加拿大留学，移民跳板正在失灵？</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.02.25</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/1fMCJ3l4p7svc4pndkBhvw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260105-ellemen-ff7ef726.png" alt="港漂开始在香港考公，稳定成了年轻人的生存共识" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20260115-ELLEMEN睿士-港漂开始在香港考公稳定成了年轻人的生存共识.html">港漂开始在香港考公，稳定成了年轻人的生存共识</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2026.01.15</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/LF7AsjJwDmFWqa_FazYRiw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20251105-ellemen-9c5da94c.png" alt="硅谷开启第二轮大裁员：（掌控）AI（的人）正在职场“洗牌”" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20251105-ELLEMEN睿士-硅谷开启第二轮大裁员掌控AI的人正在职场洗牌.html">硅谷开启第二轮大裁员：（掌控）AI（的人）正在职场“洗牌”</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.11.05</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/yXhZH8WX7blmQkLm58V6aw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20251011-ellemen-538856ba.png" alt="一半高才离开：为什么香港留不住内地精英？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20251011-ELLEMEN睿士-一半高才离开为什么香港留不住内地精英.html">一半高才离开：为什么香港留不住内地精英？</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.10.11</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/UFGhNFp5Jygxa7026Pat-w" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="商业、科技与社会">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250902-ellemen-b0b73c8f.png" alt="轻医美上瘾后，一个中产女孩的生活面临失控" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">商业、科技与社会</p>
+        <h3><a href="articles/20250902-ELLEMEN睿士-轻医美上瘾后一个中产女孩的生活面临失控.html">轻医美上瘾后，一个中产女孩的生活面临失控</a></h3>
+        <p class="card-meta-line">ELLEMEN睿士｜2025.09.02</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/m0Fg7JnBi09kEF9kw8p8cg" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/202605-wallpaper-cfe6ffaa.png" alt="流线中的旅行 Journey in the Flow" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/202605-纸刊-流线中的旅行JourneyintheFlow.html">流线中的旅行 Journey in the Flow</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.05</p>
+
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260402-wallpaper-64c4b2a2.jpg" alt="一座改造的方盒子建筑里能容纳些什么？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20260402-Wallpaper中文版-一座改造的方盒子建筑里能容纳些什么.html">一座改造的方盒子建筑里能容纳些什么？</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.04.02</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/uqd6BPnqLlvfQ2mdcEo0Tg" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260225-wallpaper-77d44684.png" alt="AI时代，我们为什么还需要实体家具展？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20260225-Wallpaper中文版-AI时代我们为什么还需要实体家具展.html">AI时代，我们为什么还需要实体家具展？</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.02.25</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/2BEgV3q16MXFaxTTYaVn-w" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250926-wallpaper-c377d684.webp" alt="Molteni&amp;C｜一座百年宫殿如何通过设计重生？" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20250926-Wallpaper中文版-MolteniC一座百年宫殿如何通过设计重生.html">Molteni&amp;C｜一座百年宫殿如何通过设计重生？</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.09.26</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/6calgKjQwnD4bUlmYpsDyA" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250830-wallpaper-31a908ad.webp" alt="诺乐工坊｜牧区的“不迎合”：一种新的城市性品牌空间" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20250830-Wallpaper-诺乐工坊牧区的不迎合一种新的城市性品牌空间.html">诺乐工坊｜牧区的“不迎合”：一种新的城市性品牌空间</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.08.30</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/EpEqhTG9DqHae6a20yakBw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/202506-wallpaper-3daa6cad.png" alt="Urban Fabric Rugs｜韵脚" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/202506-纸刊-UrbanFabricRugs韵脚.html">Urban Fabric Rugs｜韵脚</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.06</p>
+
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20250318-wallpaper-48e11f43.png" alt="Aesop伊索海南店｜南海之畔的藻影浮光" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20250318-Wallpaper-Aesop伊索海南店南海之畔的藻影浮光.html">Aesop伊索海南店｜南海之畔的藻影浮光</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.03.18</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/2yqcVx0bkTQcZOycP4v_WQ" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/202501-wallpaper-5f657c3b.png" alt="路易威登×村上隆｜超越二十年" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/202501-纸刊-路易威登村上隆超越二十年.html">路易威登×村上隆｜超越二十年</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2025.01</p>
+
+      </div>
+    </article>
+    </div></section>
+              </div>
+              <script>
+(() => {
+  const root = document.documentElement;
+  const stored = localStorage.getItem("portfolio-theme");
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const initial = stored || (prefersDark ? "dark" : "light");
+  const button = document.querySelector(".theme-toggle");
+  const setTheme = (theme) => {
+    root.dataset.theme = theme;
+    if (button) {
+      button.dataset.theme = theme;
+      const symbol = button.querySelector(".theme-symbol");
+      if (symbol) symbol.textContent = theme === "dark" ? "🌙" : "☀️";
+      button.setAttribute("aria-label", theme === "dark" ? "切换到 Light Mode" : "切换到 Dark Mode");
+      button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+    }
+  };
+  setTheme(initial);
+  button?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("portfolio-theme", next);
+    setTheme(next);
+  });
+
+  document.querySelectorAll(".copy-social").forEach((copyButton) => {
+    copyButton.addEventListener("click", async () => {
+      const text = copyButton.dataset.copy || "";
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyButton.dataset.copied = "true";
+        window.setTimeout(() => {
+          copyButton.dataset.copied = "false";
+        }, 1400);
+      } catch (error) {
+        copyButton.dataset.copied = "false";
+      }
+    });
+  });
+
+  const archive = document.querySelector(".archive-title");
+  if (!archive) return;
+  const typeButtons = Array.from(document.querySelectorAll(".type-filter"));
+  const viewButtons = Array.from(document.querySelectorAll(".view-button"));
+  const panels = Array.from(document.querySelectorAll("[data-view-panel]"));
+  const items = Array.from(document.querySelectorAll("[data-work-type]"));
+
+  typeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const type = button.dataset.type || "all";
+      typeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+      items.forEach((item) => {
+        item.hidden = type !== "all" && item.dataset.workType !== type;
+      });
+      const url = new URL(window.location.href);
+      if (type === "all") {
+        url.searchParams.delete("type");
+      } else {
+        url.searchParams.set("type", type);
+      }
+      window.history.replaceState({}, "", url);
+    });
+  });
+
+  viewButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.dataset.view || "grid";
+      viewButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.viewPanel === view));
+    });
+  });
+
+  const initialType = new URLSearchParams(window.location.search).get("type");
+  if (initialType) {
+    const target = typeButtons.find((button) => button.dataset.type === initialType);
+    target?.click();
+  }
+})();
+</script>
+            </body>
+            </html>
