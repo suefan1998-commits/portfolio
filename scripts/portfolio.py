@@ -55,7 +55,6 @@ PUBLIC = ROOT / "public"
 ASSETS = ROOT / "assets"
 PDF_DIR = ROOT / "exports" / "pdf"
 TMP = ROOT / "tmp"
-ROOT_CNAME = ROOT / "CNAME"
 NODE = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node")
 NODE_MODULES = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules")
 WORKBOOK_TOOLS = ROOT / "scripts" / "workbook_tools.mjs"
@@ -1046,7 +1045,6 @@ def contact_page_html() -> str:
 def build_site() -> None:
     ensure_dirs()
     articles = load_articles(public_only=True)
-    custom_domain = site_custom_domain()
     if PUBLIC.exists():
         shutil.rmtree(PUBLIC)
     (PUBLIC / "articles").mkdir(parents=True)
@@ -1180,28 +1178,13 @@ def build_site() -> None:
             active="archive",
         )
 
-    write_pages_metadata(custom_domain)
+    write_static_site_metadata()
     print(f"网站已更新：{PUBLIC / 'index.html'}")
 
 
-def site_custom_domain() -> str:
-    env_domain = os.environ.get("PORTFOLIO_SITE_DOMAIN", "").strip()
-    if env_domain:
-        return env_domain
-    for path in [ROOT_CNAME, PUBLIC / "CNAME"]:
-        if not path.exists():
-            continue
-        domain = path.read_text(encoding="utf-8").strip().splitlines()
-        if domain:
-            return domain[0].strip()
-    return ""
-
-
-def write_pages_metadata(custom_domain: str = "") -> None:
+def write_static_site_metadata() -> None:
     PUBLIC.mkdir(parents=True, exist_ok=True)
     (PUBLIC / ".nojekyll").write_text("", encoding="utf-8")
-    if custom_domain:
-        (PUBLIC / "CNAME").write_text(f"{custom_domain}\n", encoding="utf-8")
 
 
 def run_git(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -1247,7 +1230,7 @@ def has_origin_remote() -> bool:
 
 def publish_site(message: str) -> None:
     if not message.strip():
-        raise SystemExit("请提供本次发布说明，例如：./portfolio.sh publish \"更新作品集网站\"")
+        raise SystemExit("请提供本次备份说明，例如：./portfolio.sh publish \"更新作品集网站\"")
 
     build_site()
     index = PUBLIC / "index.html"
@@ -1266,11 +1249,24 @@ def publish_site(message: str) -> None:
     if has_origin_remote():
         branch = current_git_branch()
         subprocess.run(["git", "push", "-u", "origin", branch], cwd=ROOT, check=True)
-        print("已推送到 GitHub。GitHub Pages 会自动部署 public/。")
+        print("已推送到 GitHub 备份仓库。线上网站请继续运行 Vercel 或腾讯云部署步骤。")
     else:
         print("尚未配置 GitHub 远程仓库。创建公开仓库后运行：")
         print("git remote add origin <你的 GitHub 仓库地址>")
         print(f"git push -u origin {current_git_branch()}")
+
+
+def deploy_vercel() -> None:
+    build_site()
+    index = PUBLIC / "index.html"
+    if not index.exists():
+        raise SystemExit("网站生成失败：未找到 public/index.html。")
+
+    npx = shutil.which("npx")
+    if not npx:
+        raise SystemExit("找不到 npx。也可以进入 Vercel Drop 手动上传 public/ 文件夹。")
+
+    subprocess.run([npx, "vercel", "--prod", str(PUBLIC)], cwd=ROOT, check=True)
 
 
 def site_nav(asset_prefix: str, active: str) -> str:
@@ -2861,8 +2857,10 @@ def parse_args() -> argparse.Namespace:
     all_cmd = sub.add_parser("all", help="入库、更新网站，并可生成 PDF")
     all_cmd.add_argument("query", nargs="?", help="岗位或主题，例如：文旅类撰稿人岗位")
 
-    publish_cmd = sub.add_parser("publish", help="更新静态网站、提交并推送到 GitHub")
-    publish_cmd.add_argument("message", help="本次发布说明，例如：新增某某作品")
+    publish_cmd = sub.add_parser("publish", help="更新静态网站、提交并推送到 GitHub 备份")
+    publish_cmd.add_argument("message", help="本次备份说明，例如：新增某某作品")
+
+    sub.add_parser("deploy-vercel", help="更新静态网站并通过 Vercel CLI 发布全球版")
     return parser.parse_args()
 
 
@@ -2880,6 +2878,8 @@ def main() -> None:
         run_all(args.query)
     elif args.command == "publish":
         publish_site(args.message)
+    elif args.command == "deploy-vercel":
+        deploy_vercel()
 
 
 if __name__ == "__main__":

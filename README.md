@@ -59,13 +59,21 @@
 ./portfolio.sh site
 ```
 
-发布网站到 GitHub Pages：
+更新网站并备份到 GitHub：
 
 ```bash
 ./portfolio.sh publish "更新作品集网站"
 ```
 
-`publish` 会先重新生成 `public/`，再把本次变更提交到 Git，并在配置了 GitHub 远程仓库后推送到 GitHub。推送后，GitHub Actions 会把 `public/` 发布到 GitHub Pages。
+`publish` 会先重新生成 `public/`，再把本次变更提交到 Git，并在配置了 GitHub 远程仓库后推送到 GitHub。GitHub 只作为代码和网站产物备份，不负责自动上线。
+
+发布 Vercel 全球版：
+
+```bash
+./portfolio.sh deploy-vercel
+```
+
+首次运行时会进入 Vercel 登录和项目确认流程；如果不想使用命令行，也可以进入 Vercel Drop，把 `public/` 文件夹拖拽上传。
 
 生成 PDF，例如文旅类岗位：
 
@@ -85,15 +93,24 @@
 ./portfolio.sh all "文旅类撰稿人岗位"
 ```
 
-一键完成入库、网站更新、PDF 后，如果需要同步线上网站，再运行：
+一键完成入库、网站更新、PDF 后，如果需要备份并同步全球版网站，再运行：
 
 ```bash
 ./portfolio.sh publish "更新作品集和网站"
+./portfolio.sh deploy-vercel
 ```
 
 ## 网站上线
 
-本项目采用 GitHub Pages 托管 `public/` 中的静态网站文件。首次上线需要：
+本项目采用两条线上线：
+
+- GitHub：手动备份代码和 `public/` 静态网站产物。
+- Vercel：今天先上线全球版。
+- 腾讯云：域名注册、实名认证和 ICP 备案并行推进；备案通过后上线国内版。
+
+### GitHub 备份
+
+首次备份需要：
 
 1. 在 GitHub 创建一个公开仓库。
 2. 在本地配置远程仓库地址：
@@ -103,22 +120,61 @@ git remote add origin <你的 GitHub 仓库地址>
 git push -u origin main
 ```
 
-3. 在 GitHub 仓库的 Pages 设置中选择 GitHub Actions 作为发布来源。
-4. 如果使用自定义域名，在项目根目录新建 `CNAME`，内容只写域名，例如：
-
-```text
-www.example.com
-```
-
-也可以临时用环境变量发布：
+之后日常更新可以运行：
 
 ```bash
-PORTFOLIO_SITE_DOMAIN=www.example.com ./portfolio.sh publish "配置自定义域名"
+./portfolio.sh publish "更新作品集网站"
 ```
 
-5. 在腾讯云 DNS 中配置域名解析：推荐把 `www` 记录设置为 `CNAME`，指向 GitHub Pages 提供的地址。
+### Vercel 全球版
 
-未配置 GitHub 远程仓库时，`publish` 会完成本地生成和提交，并提示需要补充的 `git remote` 和 `git push` 命令。
+今天最快上线方式：
+
+```bash
+./portfolio.sh site
+npx vercel --prod public
+```
+
+也可以直接运行：
+
+```bash
+./portfolio.sh deploy-vercel
+```
+
+首次运行时，按 Vercel 提示登录、确认项目名称和发布设置。发布完成后保存 Vercel 返回的生产地址，例如：
+
+```text
+https://your-project.vercel.app
+```
+
+如果要使用自定义域名，建议在备案期间先使用 `global.<你的域名>` 指向 Vercel；备案主域名先保留给腾讯云国内版。
+
+### 腾讯云国内版
+
+备案通过前可以同步准备：
+
+- 确认域名实名认证和 ICP 备案资料已提交。
+- 创建 COS 存储桶，用于后续上传 `public/`。
+- 备案通过前不要把备案主域名正式接入国内网站服务。
+
+备案通过后：
+
+1. 把 `public/` 全部内容上传到腾讯云 COS。
+2. 开启静态网站托管，首页文档设为 `index.html`。
+3. 绑定备案通过的域名，例如 `www.<你的域名>` 或 `cn.<你的域名>`。
+4. 配置 HTTPS 证书。
+5. 在网站页脚增加 ICP 备案号展示和链接。
+6. 验证首页、作品总览、单篇文章页、CSS 和图片资源都能访问。
+
+日常更新流程：
+
+```
+./portfolio.sh ingest
+./portfolio.sh publish "更新作品集网站"
+./portfolio.sh deploy-vercel
+```
+
+国内版上线后，再把同一份 `public/` 上传到腾讯云 COS。
 
 ## 处理规则
 
