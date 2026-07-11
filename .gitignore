@@ -2,7 +2,7 @@ node_modules
 __pycache__/
 .DS_Store
 .vercel/
-tmp/
-exports/pdf/
+work/tmp/
+output/pdf/
 *.inspect.ndjson
 .vercel

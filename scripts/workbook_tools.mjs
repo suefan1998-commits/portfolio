@@ -98,7 +98,7 @@ async function createTemplate(outputPath) {
     ["作品ID", "可留空，整理入库时自动生成。"],
     ["标题", "可留空；新媒体链接会尽量从网页标题提取，纸刊文件名会作为兜底标题。"],
     ["来源类型", "填写“新媒体”或“纸刊”。"],
-    ["链接/文件名", "新媒体填链接；纸刊填 inbox 文件夹内的文件名。"],
+    ["链接/文件名", "新媒体填链接；纸刊填 input/inbox 文件夹内的文件名。"],
     ["撰稿类型", "主分类，例如人物与访谈、城市、旅行与生活方式、设计、建筑与文化、商业、科技与社会、品牌特稿。"],
     ["主题标签", "辅助筛选标签，多个标签用顿号、逗号或分号分隔。"],
     ["发布媒体", "填写发布平台、刊物或客户名称。"],
@@ -129,8 +129,9 @@ async function createTemplate(outputPath) {
     format: "png",
   });
   const previewBytes = new Uint8Array(await preview.arrayBuffer());
-  await fs.mkdir(path.join(path.dirname(outputPath), "tmp"), { recursive: true });
-  await fs.writeFile(path.join(path.dirname(outputPath), "tmp", "registry_preview.png"), previewBytes);
+  const previewDir = path.join(path.dirname(outputPath), "work", "tmp");
+  await fs.mkdir(previewDir, { recursive: true });
+  await fs.writeFile(path.join(previewDir, "registry_preview.png"), previewBytes);
 }
 
 async function updateStatus(workbookPath, updatesPath) {

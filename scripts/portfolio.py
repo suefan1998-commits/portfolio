@@ -49,12 +49,16 @@ except Exception as exc:  # pragma: no cover
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "portfolio_registry.xlsx"
-INBOX = ROOT / "inbox"
-CONTENT = ROOT / "content"
-PUBLIC = ROOT / "public"
-ASSETS = ROOT / "assets"
-PDF_DIR = ROOT / "exports" / "pdf"
-TMP = ROOT / "tmp"
+INPUT = ROOT / "input"
+OUTPUT = ROOT / "output"
+WORK = ROOT / "work"
+INBOX = INPUT / "inbox"
+CONTENT = OUTPUT / "content"
+SUMMARIES = OUTPUT / "summaries"
+PUBLIC = OUTPUT / "site"
+ASSETS = INPUT / "assets"
+PDF_DIR = OUTPUT / "pdf"
+TMP = WORK / "tmp"
 NODE = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node")
 NODE_MODULES = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules")
 WORKBOOK_TOOLS = ROOT / "scripts" / "workbook_tools.mjs"
@@ -190,7 +194,7 @@ def slugify(text: str, fallback: str = "item") -> str:
 
 
 def ensure_dirs() -> None:
-    for folder in [INBOX, CONTENT, PUBLIC, ASSETS, PDF_DIR, TMP]:
+    for folder in [INBOX, CONTENT, SUMMARIES, PUBLIC, ASSETS, PDF_DIR, TMP]:
         folder.mkdir(parents=True, exist_ok=True)
 
 
@@ -484,7 +488,7 @@ def extract_text_file(path: Path) -> str:
 def extract_print_article(filename: str) -> str:
     path = INBOX / filename
     if not path.exists():
-        raise RuntimeError(f"inbox 中找不到文件：{filename}")
+        raise RuntimeError(f"input/inbox 中找不到文件：{filename}")
     suffix = path.suffix.lower()
     if suffix == ".docx":
         return extract_docx(path)
@@ -530,6 +534,140 @@ def write_article(row: RegistryRow, title: str, text: str, source_kind: str) -> 
         encoding="utf-8",
     )
     return work_id
+
+
+def summary_path(article: dict) -> Path:
+    return SUMMARIES / f"{article.get('id')}.md"
+
+
+def summary_frontmatter(article: dict, status: str = "待审核") -> str:
+    data = {
+        "id": article.get("id", ""),
+        "title": article.get("title", ""),
+        "source_type": article.get("source_type", ""),
+        "source": article.get("source", ""),
+        "writing_type": article.get("writing_type", ""),
+        "tags": article.get("tags", []),
+        "media": article.get("media", ""),
+        "publish_date": article.get("publish_date", ""),
+        "public": article.get("public", "是"),
+        "featured": article.get("featured", "否"),
+        "article_image": article.get("article_image", ""),
+        "source_kind": article.get("source_kind", ""),
+        "summary_status": status,
+        "notes": article.get("notes", ""),
+    }
+    lines = ["---"]
+    for key, value in data.items():
+        if isinstance(value, list):
+            lines.append(f"{key}: {json.dumps(value, ensure_ascii=False)}")
+        else:
+            escaped = str(value).replace('"', '\\"')
+            lines.append(f'{key}: "{escaped}"')
+    lines.append("---")
+    return "\n".join(lines)
+
+
+def split_article_sections(body: str) -> list[tuple[str, list[str]]]:
+    sections: list[tuple[str, list[str]]] = []
+    current_title = "精选节选"
+    current_paragraphs: list[str] = []
+    for block in [item.strip() for item in body.split("\n\n") if item.strip()]:
+        heading = markdown_heading(block)
+        if heading:
+            if current_paragraphs:
+                sections.append((current_title, current_paragraphs))
+            current_title = heading[1]
+            current_paragraphs = []
+            continue
+        if is_editorial_credit(block):
+            continue
+        if len(normalize_spaces(block)) < 45:
+            continue
+        current_paragraphs.append(block)
+    if current_paragraphs:
+        sections.append((current_title, current_paragraphs))
+    return sections
+
+
+def paragraph_score(paragraph: str) -> int:
+    text = normalize_spaces(paragraph)
+    score = 0
+    if 90 <= len(text) <= 360:
+        score += 3
+    if re.search(r"(然而|但|因此|这|正是|意味着|问题|核心|背后|成为|并非|不是|而是)", text):
+        score += 2
+    if re.search(r"(城市|文化|设计|人物|品牌|社会|旅行|建筑|商业|技术|社区)", text):
+        score += 1
+    if len(text) > 520:
+        score -= 2
+    return score
+
+
+def draft_overview(article: dict, sections: list[tuple[str, list[str]]]) -> str:
+    title = str(article.get("title") or "这篇作品")
+    first = ""
+    for _, paragraphs in sections:
+        if paragraphs:
+            first = trim_text(paragraphs[0], 58).rstrip("。")
+            break
+    if first:
+        return f"围绕《{title}》，文章呈现{first}。"
+    return f"围绕《{title}》，文章梳理其核心议题与文本线索。"
+
+
+def draft_summary_body(article: dict) -> str:
+    sections = split_article_sections(str(article.get("body") or ""))
+    lines = ["【概述】", draft_overview(article, sections)]
+    for title, paragraphs in sections:
+        ranked = sorted(paragraphs, key=paragraph_score, reverse=True)[:2]
+        if not ranked:
+            continue
+        lines.extend(["", f"## {title}"])
+        for paragraph in ranked:
+            lines.extend(["", f"……{trim_text(paragraph, 260).strip('。')}。……"])
+    return "\n".join(lines).strip()
+
+
+def ensure_summary_draft(article: dict) -> bool:
+    path = summary_path(article)
+    if path.exists():
+        return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        summary_frontmatter(article, "待审核") + "\n\n" + draft_summary_body(article) + "\n",
+        encoding="utf-8",
+    )
+    return True
+
+
+def generate_missing_summaries() -> tuple[int, int, int]:
+    ensure_dirs()
+    created = 0
+    pending = 0
+    confirmed = 0
+    for article in load_articles(public_only=False):
+        if ensure_summary_draft(article):
+            created += 1
+        summary = parse_article(summary_path(article)) if summary_path(article).exists() else {}
+        status = normalize_spaces(summary.get("summary_status"))
+        if status == "已确认":
+            confirmed += 1
+        else:
+            pending += 1
+    return created, pending, confirmed
+
+
+def summaries_status() -> None:
+    created, pending, confirmed = generate_missing_summaries()
+    print(f"summary 草稿检查完成：新增 {created} 篇，待审核 {pending} 篇，已确认 {confirmed} 篇。")
+    for path in sorted(SUMMARIES.glob("*.md")):
+        if path.name == ".gitkeep":
+            continue
+        article = parse_article(path)
+        status = normalize_spaces(article.get("summary_status")) or "待审核"
+        if status != "已确认":
+            print(f"- {status}：{article.get('title') or path.stem}")
 
 
 def update_registry_status(updates: list[dict]) -> None:
@@ -584,6 +722,8 @@ def ingest() -> None:
                 raise RuntimeError("来源类型必须是“新媒体”或“纸刊”")
 
             work_id = write_article(row, title, text, source_kind)
+            article = parse_article(CONTENT / f"{work_id}.md")
+            ensure_summary_draft(article)
             updates.append(
                 {
                     "rowIndex": row.row_index,
@@ -656,6 +796,56 @@ def load_articles(public_only: bool = False) -> list[dict]:
         articles.append(article)
     articles.sort(key=lambda item: str(item.get("publish_date") or ""), reverse=True)
     return articles
+
+
+def load_summary_articles(public_only: bool = False) -> list[dict]:
+    articles = []
+    for article in load_articles(public_only=public_only):
+        item = dict(article)
+        item["_full_body"] = article.get("body", "")
+        path = summary_path(article)
+        if path.exists():
+            summary = parse_article(path)
+            summary_body = str(summary.get("body") or "")
+            for key, value in summary.items():
+                if key not in {"body", "path"} and value != "":
+                    item[key] = value
+            item["summary_status"] = normalize_spaces(summary.get("summary_status")) or "待审核"
+            item["summary_body"] = summary_body
+            item["body"] = summary_body if item["summary_status"] == "已确认" else ""
+            item["summary_path"] = path
+        else:
+            item["summary_status"] = "待生成"
+            item["summary_body"] = ""
+            item["body"] = ""
+            item["summary_path"] = path
+        articles.append(item)
+    articles.sort(key=lambda item: str(item.get("publish_date") or ""), reverse=True)
+    return articles
+
+
+def confirmed_summary(article: dict) -> bool:
+    return normalize_spaces(article.get("summary_status")) == "已确认"
+
+
+def public_body(article: dict) -> str:
+    return str(article.get("body") or "") if confirmed_summary(article) else ""
+
+
+def public_preview(article: dict, limit: int = 220) -> str:
+    body = public_body(article)
+    if not body:
+        return "摘要待确认。请点击阅读原文查看完整作品。"
+    paragraphs = []
+    for block in body.split("\n\n"):
+        text = block.strip()
+        if not text or re.match(r"^\s{0,3}#{1,6}\s+", text):
+            continue
+        if text.startswith("【概述】"):
+            text = text.removeprefix("【概述】").strip()
+        if text:
+            paragraphs.append(text)
+    return trim_text(paragraphs[0], limit) if paragraphs else "摘要待确认。请点击阅读原文查看完整作品。"
 
 
 def registry_article_overrides() -> dict[str, dict[str, str]]:
@@ -943,7 +1133,7 @@ def site_media_name(value: object) -> str:
 
 
 def read_contact_info() -> dict[str, str]:
-    path = ROOT / "contact_info_template.md"
+    path = INPUT / "contact_info_template.md"
     info = {"email": "", "city": ""}
     if not path.exists():
         return info
@@ -963,7 +1153,9 @@ def read_contact_info() -> dict[str, str]:
 
 
 def latest_full_pdf_path() -> Path | None:
-    candidates = sorted(PDF_DIR.glob("*SuFAN全部作品集.pdf"), key=lambda path: path.stat().st_mtime, reverse=True)
+    candidates = sorted(PDF_DIR.glob("*SuFAN全部作品集-摘要版.pdf"), key=lambda path: path.stat().st_mtime, reverse=True)
+    if not candidates:
+        candidates = sorted(PDF_DIR.glob("*SuFAN全部作品集*.pdf"), key=lambda path: path.stat().st_mtime, reverse=True)
     return candidates[0] if candidates else None
 
 
@@ -1044,7 +1236,7 @@ def contact_page_html() -> str:
 
 def build_site() -> None:
     ensure_dirs()
-    articles = load_articles(public_only=True)
+    articles = load_summary_articles(public_only=True)
     if PUBLIC.exists():
         shutil.rmtree(PUBLIC)
     (PUBLIC / "articles").mkdir(parents=True)
@@ -1054,7 +1246,7 @@ def build_site() -> None:
 
     types = ordered_site_writing_types(articles)
     media = media_names(articles)
-    archive_articles = sort_articles_by_type(articles)
+    archive_articles = sorted(articles, key=lambda item: date_sort_desc(item.get("publish_date")))
     hero_image = site_image_src(profile_image_path())
     hero_photo = (
         picture_frame("hero-photo", hero_image, "Su FAN")
@@ -1136,7 +1328,7 @@ def build_site() -> None:
         )
 
     for article in articles:
-        body_html, toc = article_body_and_toc(article["body"])
+        body_html, toc = article_body_and_toc(public_body(article))
         tags = " ".join(f"<span>{html_escape(tag)}</span>" for tag in article.get("tags", []))
         article_image = site_image_src(article.get("article_image"), "../")
         article_image_html = (
@@ -1154,15 +1346,13 @@ def build_site() -> None:
                 {article_image_html}
                 <div class="article-toc">
                   <span>目录</span>
-                  {toc_html(toc)}
+                  {toc_html(toc) if confirmed_summary(article) else '<p class="toc-empty">摘要待确认</p>'}
                 </div>
               </aside>
               <div class="article-content">
                 <a class="back-link" href="../archive.html">返回作品总览</a>
                 <header class="article-header">
-                  <p>Published Work</p>
                   <h1>{html_escape(article.get('title'))}</h1>
-                  {source_link_html(article)}
                   <div class="meta">
                     <span>{html_escape(site_media_name(article.get('media')))}</span>
                     <span>{html_escape(article.get('publish_date'))}</span>
@@ -1170,7 +1360,8 @@ def build_site() -> None:
                     {tags}
                   </div>
                 </header>
-                <div class="body">{body_html}</div>
+                {source_link_html(article, "article-source-link")}
+                <div class="body">{body_html if confirmed_summary(article) else '<p>摘要待确认。请点击阅读原文查看完整作品。</p>'}</div>
               </div>
             </article>
             """,
@@ -1235,7 +1426,7 @@ def publish_site(message: str) -> None:
     build_site()
     index = PUBLIC / "index.html"
     if not index.exists():
-        raise SystemExit("网站生成失败：未找到 public/index.html。")
+        raise SystemExit("网站生成失败：未找到 output/site/index.html。")
 
     ensure_git_repo()
     run_git("add", ".")
@@ -1260,11 +1451,11 @@ def deploy_vercel() -> None:
     build_site()
     index = PUBLIC / "index.html"
     if not index.exists():
-        raise SystemExit("网站生成失败：未找到 public/index.html。")
+        raise SystemExit("网站生成失败：未找到 output/site/index.html。")
 
     npx = shutil.which("npx")
     if not npx:
-        raise SystemExit("找不到 npx。也可以进入 Vercel Drop 手动上传 public/ 文件夹。")
+        raise SystemExit("找不到 npx。也可以进入 Vercel Drop 手动上传 output/site/ 文件夹。")
 
     subprocess.run([npx, "vercel", "--prod", str(PUBLIC)], cwd=ROOT, check=True)
 
@@ -1431,7 +1622,7 @@ def feature_article_card(article: dict, prefix: str = "", featured: bool = False
     if featured:
         classes.append("feature-primary")
     image_html = article_image_markup(article, prefix, "feature-image")
-    preview = make_excerpt(article, " ".join([str(article.get("writing_type") or ""), " ".join(article.get("tags", []))]), 220)
+    preview = public_preview(article, 220)
     return f"""
     <article class="{' '.join(classes)}" data-work-type="{html_escape(site_writing_type(article.get('writing_type')))}">
       <a href="{prefix}articles/{html_escape(article['id'])}.html">{image_html}</a>
@@ -1474,7 +1665,7 @@ def article_card(article: dict, prefix: str = "", featured: bool = False) -> str
         if image
         else ""
     )
-    preview = make_excerpt(article, " ".join([str(article.get("writing_type") or ""), " ".join(article.get("tags", []))]), 240)
+    preview = public_preview(article, 240)
     return f"""
     <article class="{class_name}">
       <div class="feature-copy">
@@ -2198,6 +2389,22 @@ def write_css() -> None:
           line-height: 1.14;
           margin-bottom: 0.22em;
         }
+        .article-source-link {
+          margin: 28px 0 0;
+          color: var(--muted);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.9;
+        }
+        .article-source-link a {
+          border-bottom: 1px solid currentColor;
+        }
+        .article-source-link a:hover {
+          color: var(--ink);
+        }
+        .article-source-link + .body {
+          margin-top: 24px;
+        }
         .body { margin-top: 44px; }
         .body h2,
         .body h3,
@@ -2526,17 +2733,19 @@ def portfolio_subject(query: str) -> str:
     return text or "综合"
 
 
-def portfolio_pdf_title(subject: str, all_export: bool) -> str:
+def portfolio_pdf_title(subject: str, all_export: bool, full_text: bool = False) -> str:
+    suffix = "全文版" if full_text else "摘要版"
     if all_export:
-        return "Su FAN 全部作品集"
-    return f"Su FAN {subject}类作品集"
+        return f"Su FAN 全部作品集（{suffix}）"
+    return f"Su FAN {subject}类作品集（{suffix}）"
 
 
-def portfolio_pdf_filename(subject: str, all_export: bool) -> str:
+def portfolio_pdf_filename(subject: str, all_export: bool, full_text: bool = False) -> str:
     date_prefix = dt.date.today().strftime("%Y%m%d")
+    suffix = "全文版" if full_text else "摘要版"
     if all_export:
-        return f"{date_prefix}-SuFAN全部作品集.pdf"
-    return f"{date_prefix}-SuFAN{subject}类作品集.pdf"
+        return f"{date_prefix}-SuFAN全部作品集-{suffix}.pdf"
+    return f"{date_prefix}-SuFAN{subject}类作品集-{suffix}.pdf"
 
 
 def roman_number(number: int) -> str:
@@ -2587,9 +2796,14 @@ def markdown_heading(block: str) -> tuple[int, str] | None:
     return len(match.group(1)), match.group(2).strip()
 
 
-def make_pdf(query: str) -> Path:
+def wants_full_text_pdf(query: str) -> bool:
+    return "全文版" in normalize_spaces(query)
+
+
+def make_pdf(query: str, full_text: bool = False) -> Path:
     ensure_dirs()
-    articles = load_articles(public_only=False)
+    full_text = full_text or wants_full_text_pdf(query)
+    articles = load_articles(public_only=False) if full_text else load_summary_articles(public_only=False)
     matched = match_articles(articles, query)
     if not matched:
         raise SystemExit(f"没有找到与“{query}”匹配的已入库作品。请检查撰稿类型或主题标签。")
@@ -2598,8 +2812,8 @@ def make_pdf(query: str) -> Path:
     all_export = is_all_portfolio_query(query)
     grouped = wants_grouped_pdf(query)
     subject = portfolio_subject(query)
-    output = PDF_DIR / portfolio_pdf_filename(subject, all_export)
-    pdf_title = portfolio_pdf_title(subject, all_export)
+    output = PDF_DIR / portfolio_pdf_filename(subject, all_export, full_text)
+    pdf_title = portfolio_pdf_title(subject, all_export, full_text)
 
     def create_doc(path: Path) -> PortfolioDocTemplate:
         frame = Frame(18 * mm, 18 * mm, A4[0] - 36 * mm, A4[1] - 36 * mm, id="main")
@@ -2718,7 +2932,7 @@ def make_pdf(query: str) -> Path:
 
     def build_story(toc_pages: dict[str, int] | None = None) -> list:
         toc_pages = toc_pages or {}
-        media_list = "、".join(media_names(load_articles(public_only=True))) or "暂无"
+        media_list = "、".join(media_names(load_summary_articles(public_only=True))) or "暂无"
         profile = [
             "现为自由撰稿人，base 北京。",
             "中英文流利，能从容应对双语采访与撰稿任务。",
@@ -2791,7 +3005,10 @@ def make_pdf(query: str) -> Path:
                         source_link_style,
                     )
                 )
-            for paragraph in [p.strip() for p in str(article.get("body") or "").split("\n\n") if p.strip()]:
+            body_source = str(article.get("body") or "")
+            if not full_text and not confirmed_summary(article):
+                body_source = "摘要待确认。请点击阅读原文查看完整作品。"
+            for paragraph in [p.strip() for p in body_source.split("\n\n") if p.strip()]:
                 lines = [line.strip() for line in paragraph.splitlines() if line.strip()]
                 first_line = lines[0] if lines else ""
                 heading = markdown_heading(first_line)
@@ -2859,9 +3076,13 @@ def parse_args() -> argparse.Namespace:
 
     sub.add_parser("ingest", help="整理入库")
     sub.add_parser("site", help="更新静态网站")
+    sub.add_parser("summaries", help="生成缺失的摘要草稿并列出待审核作品")
 
     pdf_cmd = sub.add_parser("pdf", help="生成 PDF 作品集")
     pdf_cmd.add_argument("query", help="岗位或主题，例如：文旅类撰稿人岗位")
+
+    pdf_full_cmd = sub.add_parser("pdf-full", help="生成全文版 PDF 作品集")
+    pdf_full_cmd.add_argument("query", help="岗位或主题，例如：全部作品集，分门别类")
 
     all_cmd = sub.add_parser("all", help="入库、更新网站，并可生成 PDF")
     all_cmd.add_argument("query", nargs="?", help="岗位或主题，例如：文旅类撰稿人岗位")
@@ -2881,8 +3102,12 @@ def main() -> None:
         ingest()
     elif args.command == "site":
         build_site()
+    elif args.command == "summaries":
+        summaries_status()
     elif args.command == "pdf":
         make_pdf(args.query)
+    elif args.command == "pdf-full":
+        make_pdf(args.query, full_text=True)
     elif args.command == "all":
         run_all(args.query)
     elif args.command == "publish":
