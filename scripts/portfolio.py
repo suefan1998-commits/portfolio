@@ -67,6 +67,7 @@ WORKBOOK_TOOLS = ROOT / "scripts" / "workbook_tools.mjs"
 REQUIRED_HEADERS = [
     "作品ID",
     "标题",
+    "Keyline",
     "来源类型",
     "链接/文件名",
     "撰稿类型",
@@ -93,6 +94,7 @@ class RegistryRow:
     row_index: int
     work_id: str
     title: str
+    keyline: str
     source_type: str
     source: str
     writing_type: str
@@ -253,6 +255,7 @@ def load_registry() -> list[RegistryRow]:
                 row_index=index,
                 work_id=cell_value(index, "作品ID"),
                 title=cell_value(index, "标题"),
+                keyline=cell_value(index, "Keyline"),
                 source_type=cell_value(index, "来源类型"),
                 source=cell_value(index, "链接/文件名"),
                 writing_type=cell_value(index, "撰稿类型"),
@@ -504,6 +507,7 @@ def frontmatter(row: RegistryRow, work_id: str, title: str, source_kind: str) ->
     data = {
         "id": work_id,
         "title": title,
+        "keyline": row.keyline,
         "source_type": row.source_type,
         "source": row.source,
         "writing_type": row.writing_type,
@@ -640,7 +644,7 @@ def ensure_summary_draft(article: dict) -> bool:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
     draft = dict(article)
-    draft["keyline"] = draft_overview(article, split_article_sections(str(article.get("body") or "")))
+    draft["keyline"] = normalize_spaces(article.get("keyline")) or draft_overview(article, split_article_sections(str(article.get("body") or "")))
     path.write_text(
         summary_frontmatter(draft, "待审核") + "\n\n" + draft_summary_body(article) + "\n",
         encoding="utf-8",
@@ -700,6 +704,15 @@ def ingest() -> None:
                     "rowIndex": row.row_index,
                     "status": "错误",
                     "note": append_note(row.notes, "缺少来源类型或链接/文件名"),
+                }
+            )
+            continue
+        if not row.keyline:
+            updates.append(
+                {
+                    "rowIndex": row.row_index,
+                    "status": "错误",
+                    "note": append_note(row.notes, "缺少 Keyline"),
                 }
             )
             continue
@@ -871,6 +884,7 @@ def registry_article_overrides() -> dict[str, dict[str, str]]:
             continue
         overrides[row.work_id] = {
             "source": row.source,
+            "keyline": row.keyline,
             "article_image": row.article_image,
             "featured": row.featured,
             "public": row.public,
@@ -904,6 +918,18 @@ def source_link_html(article: dict, class_name: str = "source-link") -> str:
         return ""
     safe_url = html_escape(url)
     return f'<p class="{class_name}"><a href="{safe_url}" target="_blank" rel="noopener noreferrer">阅读原文</a></p>'
+
+
+def article_source_prompt_html(article: dict) -> str:
+    url = original_url(article)
+    if not url:
+        return ""
+    safe_url = html_escape(url)
+    return (
+        '<p class="article-source-link">'
+        f'完整内容请点击 <a href="{safe_url}" target="_blank" rel="noopener noreferrer">阅读原文</a>，以下为精选节选'
+        "</p>"
+    )
 
 
 def display_date(value: object) -> str:
@@ -1367,9 +1393,9 @@ def build_site() -> None:
                 </div>
               </aside>
               <div class="article-content">
-                <a class="back-link" href="../archive.html">返回作品总览</a>
+                <a class="back-link js-back-link" href="../archive.html">返回上页</a>
                 <header class="article-header">
-                  <p>Published work</p>
+                  <p>Published Work</p>
                   <h1>{html_escape(article.get('title'))}</h1>
                   <div class="meta">
                     <span>{html_escape(site_media_name(article.get('media')))}</span>
@@ -1379,7 +1405,8 @@ def build_site() -> None:
                   </div>
                 </header>
                 {keyline_html}
-                {source_link_html(article, "article-source-link")}
+                <div class="article-divider"></div>
+                {article_source_prompt_html(article)}
                 <div class="body">{body_html if confirmed_summary(article) else '<p>摘要待确认。请点击阅读原文查看完整作品。</p>'}</div>
               </div>
             </article>
@@ -1558,6 +1585,15 @@ def site_script() -> str:
             }, 1400);
           } catch (error) {
             copyButton.dataset.copied = "false";
+          }
+        });
+      });
+
+      document.querySelectorAll(".js-back-link").forEach((link) => {
+        link.addEventListener("click", (event) => {
+          if (document.referrer && new URL(document.referrer).origin === window.location.origin && window.history.length > 1) {
+            event.preventDefault();
+            window.history.back();
           }
         });
       });
@@ -2416,8 +2452,7 @@ def write_css() -> None:
           padding-left: 24px;
         }
         .article-header {
-          padding-bottom: 34px;
-          border-bottom: 1px solid var(--line);
+          padding-bottom: 0;
         }
         .article-header h1 {
           font-size: 42px;
@@ -2425,7 +2460,7 @@ def write_css() -> None:
           margin-bottom: 0.22em;
         }
         .article-source-link {
-          margin: 28px 0 0;
+          margin: 18px 0 0;
           color: var(--muted);
           font-size: 16px;
           font-weight: 400;
@@ -2438,14 +2473,17 @@ def write_css() -> None:
           font-weight: 400;
           line-height: 1.9;
         }
+        .article-divider {
+          margin: 28px 0 0;
+          border-top: 1px solid var(--line);
+        }
         .article-source-link a {
           border-bottom: 1px solid currentColor;
         }
         .article-source-link a:hover {
           color: var(--ink);
         }
-        .article-source-link + .body,
-        .article-keyline + .body {
+        .article-source-link + .body {
           margin-top: 24px;
         }
         .body { margin-top: 44px; }
@@ -3038,7 +3076,13 @@ def make_pdf(query: str, full_text: bool = False) -> Path:
             title_para._bookmark_name = anchor
             title_para._bookmark_title = title
             story.append(title_para)
-            meta = f"{article.get('media') or ''} | {article.get('publish_date') or ''} | {display_writing_type(article.get('writing_type') or '')}"
+            meta_parts = [
+                normalize_spaces(article.get("media")),
+                normalize_spaces(article.get("publish_date")),
+                display_writing_type(article.get("writing_type") or ""),
+                *[normalize_spaces(tag) for tag in article.get("tags", []) if normalize_spaces(tag)],
+            ]
+            meta = " | ".join(part for part in meta_parts if part)
             story.append(Paragraph(html_escape(meta), small))
             if not full_text and confirmed_summary(article):
                 keyline = normalize_spaces(article.get("keyline"))
@@ -3046,9 +3090,14 @@ def make_pdf(query: str, full_text: bool = False) -> Path:
                     story.append(Paragraph(html_escape(keyline), base))
             url = original_url(article)
             if url:
+                source_text = (
+                    f'完整内容请点击 <a href="{html_escape(url)}">阅读原文</a>，以下为精选节选'
+                    if not full_text
+                    else f'<a href="{html_escape(url)}">阅读原文</a>'
+                )
                 story.append(
                     Paragraph(
-                        f'<a href="{html_escape(url)}">阅读原文</a>',
+                        source_text,
                         source_link_style,
                     )
                 )

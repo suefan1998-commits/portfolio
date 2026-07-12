@@ -1,11 +1,12 @@
 ---
 id: "20250830-Wallpaper-诺乐工坊牧区的不迎合一种新的城市性品牌空间"
 title: "诺乐工坊｜牧区的“不迎合”：一种新的城市性品牌空间"
+keyline: "诺乐Norlha北京三里屯店设计解读，空间氛围中文化与商业的平衡。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/EpEqhTG9DqHae6a20yakBw"
 writing_type: "品牌特稿（Brand Features）"
 tags: []
-media: "Wallpaper"
+media: "Wallpaper中文版"
 publish_date: "2025-08-30"
 public: "是"
 featured: "否"

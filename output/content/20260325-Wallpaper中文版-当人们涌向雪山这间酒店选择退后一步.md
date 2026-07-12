@@ -1,6 +1,7 @@
 ---
 id: "20260325-Wallpaper中文版-当人们涌向雪山这间酒店选择退后一步"
 title: "当人们涌向雪山，这间酒店选择“退后一步”"
+keyline: "面对雪山，设计保持克制——大乐之野（德钦梅里雪山店）项目报道。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/BzT048FmW1Sah0L-fqiwiQ"
 writing_type: "设计、建筑与文化（Design Architecture & Culture）"

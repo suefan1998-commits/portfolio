@@ -37,9 +37,9 @@
     </div>
   </aside>
   <div class="article-content">
-    <a class="back-link" href="../archive.html">返回作品总览</a>
+    <a class="back-link js-back-link" href="../archive.html">返回上页</a>
     <header class="article-header">
-      <p>Published work</p>
+      <p>Published Work</p>
       <h1>LV×村上隆｜超越二十年</h1>
       <div class="meta">
         <span>Wallpaper中文版</span>
@@ -49,8 +49,9 @@
       </div>
     </header>
     <p class="article-keyline">LV × 村上隆限时空间设计解读。</p>
+    <div class="article-divider"></div>
 
-    <div class="body"><h2 id="7cbe-9009-8282-9009">精选节选</h2><p>Louis Vuitton与村上隆合作的“路易威登×村上隆限时空间”于2025年1月1日在上海启幕，这不仅是彼此对20年前开创性合作的致敬，也是一次新的艺术与时尚的跨界实验。如村上隆所言：“作为一名艺术家，我总是从普世性角度思考我的作品在身后将如何延续下去。”艺术的价值，不仅在于能否与当前时代形成关切共鸣，更在于其能否超越时间与文化的边界，在未来、在不同文化里依然能与观众产生深刻的连接。……</p><p>……本次“路易威登×村上隆限时空间”延续了村上隆的这一经典设计理念，以独特、鲜亮的千禧风格设计点亮了上海巨鹿路街区，令人倍感欢欣。作为上海时尚与文化的中心地带，巨鹿路街道保留了海派建筑的优雅韵味，而本次限时空间以其独特的设计语言脱颖而出：白色外立面上装饰着立体的品牌标志性Monogram Multicolore图案，33种缤纷色彩和3D建模技术相结合，创造出浮动多彩的视觉效果，使人梦回千禧年的Y2K风潮，与周边建筑形成鲜明对比，又巧妙融入城市的多元文化氛围。<br>……</p><p>（编辑：杨叶）</p></div>
+    <div class="body"><h2 id="7cbe-9009-8282-9009">精选节选</h2><p>Louis Vuitton与村上隆合作的“路易威登×村上隆限时空间”于2025年1月1日在上海启幕，这不仅是彼此对20年前开创性合作的致敬，也是一次新的艺术与时尚的跨界实验。如村上隆所言：“作为一名艺术家，我总是从普世性角度思考我的作品在身后将如何延续下去。”艺术的价值，不仅在于能否与当前时代形成关切共鸣，更在于其能否超越时间与文化的边界，在未来、在不同文化里依然能与观众产生深刻的连接。</p><p>本次“路易威登×村上隆限时空间”延续了村上隆的这一经典设计理念，以独特、鲜亮的千禧风格设计点亮了上海巨鹿路街区，令人倍感欢欣。作为上海时尚与文化的中心地带，巨鹿路街道保留了海派建筑的优雅韵味，而本次限时空间以其独特的设计语言脱颖而出：白色外立面上装饰着立体的品牌标志性Monogram Multicolore图案，33种缤纷色彩和3D建模技术相结合，创造出浮动多彩的视觉效果，使人梦回千禧年的Y2K风潮，与周边建筑形成鲜明对比，又巧妙融入城市的多元文化氛围。</p><p>（编辑：杨叶）</p></div>
   </div>
 </article>
               </div>
@@ -90,6 +91,15 @@
         }, 1400);
       } catch (error) {
         copyButton.dataset.copied = "false";
+      }
+    });
+  });
+
+  document.querySelectorAll(".js-back-link").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (document.referrer && new URL(document.referrer).origin === window.location.origin && window.history.length > 1) {
+        event.preventDefault();
+        window.history.back();
       }
     });
   });

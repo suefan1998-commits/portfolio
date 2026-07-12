@@ -1,6 +1,7 @@
 ---
 id: "20251105-ELLEMEN睿士-硅谷开启第二轮大裁员掌控AI的人正在职场洗牌"
 title: "硅谷开启第二轮大裁员：（掌控）AI（的人）正在职场“洗牌”"
+keyline: "2025年10月硅谷第二轮大裁员背后，折射出劳动力市场的深刻变化。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/yXhZH8WX7blmQkLm58V6aw"
 writing_type: "商业、科技与社会（Business Technology & Society）"

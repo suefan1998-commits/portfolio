@@ -1,6 +1,7 @@
 ---
 id: "20250318-Wallpaper-Aesop伊索海南店南海之畔的藻影浮光"
 title: "Aesop伊索海南店｜南海之畔的藻影浮光"
+keyline: "Aesop伊索海南首店设计解读，以海藻为灵感，呈现品牌款待哲学。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/2yqcVx0bkTQcZOycP4v_WQ"
 writing_type: "品牌特稿（Brand Features）"

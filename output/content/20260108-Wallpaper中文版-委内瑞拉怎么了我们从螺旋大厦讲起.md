@@ -1,6 +1,7 @@
 ---
 id: "20260108-Wallpaper中文版-委内瑞拉怎么了我们从螺旋大厦讲起"
 title: "委内瑞拉怎么了？我们从螺旋大厦讲起"
+keyline: "昙花一现的国家自信，以及背后脆弱的结构土壤——本文从一座未完成的现代主义建筑出发，重新审视委内瑞拉石油繁荣背后的国家想象与结构性困境。通过建筑史资料梳理、政治经济背景研究，以及对拉丁美洲现代主义城市实践的比较分析，本文将螺旋大厦（El Helicoide）作为观察窗口，探讨现代化愿景、国家治理能力与城市空间之间复杂而脆弱的关系。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/C8SbmROJ-mJ4KXVM8AVpOA"
 writing_type: "设计、建筑与文化（Design, Architecture & Culture）"

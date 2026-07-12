@@ -1,6 +1,7 @@
 ---
 id: "20260703-悦游CNTraveler-比清迈和巴厘岛更夯的旅居地藏在南亚的雪山下"
 title: "比清迈和巴厘岛更夯的旅居地，藏在南亚的雪山下"
+keyline: "尼泊尔博卡拉，在粗粝的地方重建自己的旅居秩序。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/avUWE9pPGWFJagT--NQeiA"
 writing_type: "城市、旅行与生活方式（Travel & Lifestyle）"

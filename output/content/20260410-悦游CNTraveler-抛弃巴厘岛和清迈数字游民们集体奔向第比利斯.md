@@ -1,6 +1,7 @@
 ---
 id: "20260410-悦游CNTraveler-抛弃巴厘岛和清迈数字游民们集体奔向第比利斯"
 title: "抛弃巴厘岛和清迈，数字游民们集体奔向第比利斯"
+keyline: "从第比利斯这一座连接欧亚历史与当代生活的拼贴城市出发，观察“后巴厘岛时代”数字游民目的地正在发生的变化。通过对格鲁吉亚历史背景、工业遗产再生项目和旅居生态的资料研究，本文探讨一座尚未被过度改造的城市，如何在历史遗产、青年文化与全球流动之间形成新的生活方式。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/xfiOvjpS-OrCloZBMuajjA"
 writing_type: "城市、旅行与生活方式（Travel & Lifestyle）"

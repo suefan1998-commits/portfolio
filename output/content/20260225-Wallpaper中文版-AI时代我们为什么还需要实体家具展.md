@@ -1,6 +1,7 @@
 ---
 id: "20260225-Wallpaper中文版-AI时代我们为什么还需要实体家具展"
 title: "AI时代，我们为什么还需要实体家具展？"
+keyline: "2026年米兰国际家具展前瞻，AI时代下实体展会的价值在何处？"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/2BEgV3q16MXFaxTTYaVn-w"
 writing_type: "品牌特稿（Brand Features）"

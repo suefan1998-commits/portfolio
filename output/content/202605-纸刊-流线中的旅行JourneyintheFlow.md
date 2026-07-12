@@ -1,6 +1,7 @@
 ---
 id: "202605-纸刊-流线中的旅行JourneyintheFlow"
 title: "LV｜流线中的旅行"
+keyline: "Louis Vuitton与设计师Marc Newson合作的首款铝制拉杆箱Louis Vuitton Horizon Aluminum设计解读。"
 source_type: "纸刊"
 source: "202605-纸刊-流线中的旅行JourneyintheFlow"
 writing_type: "品牌特稿（Brand Features）"

@@ -638,8 +638,7 @@
           padding-left: 24px;
         }
         .article-header {
-          padding-bottom: 34px;
-          border-bottom: 1px solid var(--line);
+          padding-bottom: 0;
         }
         .article-header h1 {
           font-size: 42px;
@@ -647,7 +646,7 @@
           margin-bottom: 0.22em;
         }
         .article-source-link {
-          margin: 28px 0 0;
+          margin: 18px 0 0;
           color: var(--muted);
           font-size: 16px;
           font-weight: 400;
@@ -660,14 +659,17 @@
           font-weight: 400;
           line-height: 1.9;
         }
+        .article-divider {
+          margin: 28px 0 0;
+          border-top: 1px solid var(--line);
+        }
         .article-source-link a {
           border-bottom: 1px solid currentColor;
         }
         .article-source-link a:hover {
           color: var(--ink);
         }
-        .article-source-link + .body,
-        .article-keyline + .body {
+        .article-source-link + .body {
           margin-top: 24px;
         }
         .body { margin-top: 44px; }

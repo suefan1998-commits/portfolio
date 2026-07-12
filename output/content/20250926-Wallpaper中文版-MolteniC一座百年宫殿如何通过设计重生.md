@@ -1,6 +1,7 @@
 ---
 id: "20250926-Wallpaper中文版-MolteniC一座百年宫殿如何通过设计重生"
 title: "Molteni&C｜一座百年宫殿如何通过设计重生？"
+keyline: "意大利高端家居品牌Molteni&C的米兰空间，一座“都市展亭”。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/6calgKjQwnD4bUlmYpsDyA"
 writing_type: "品牌特稿（Brand Features）"

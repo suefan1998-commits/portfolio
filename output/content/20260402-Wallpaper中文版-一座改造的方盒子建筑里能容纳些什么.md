@@ -1,6 +1,7 @@
 ---
 id: "20260402-Wallpaper中文版-一座改造的方盒子建筑里能容纳些什么"
 title: "YEARLY PLAN｜一座改造的方盒子建筑里能容纳些什么？"
+keyline: "从 YEARLY PLAN 成都 HOUSE 的开幕展览出发，观察一个品牌如何通过建筑、艺术与策展实践重新定义“家”的意义。通过对策展人与创作者的深度采访、对空间细节与展览叙事的现场观察，以及对当代居住理念与设计文化的研究，本文探讨空间如何超越功能属性，成为安放个人经验、审美与精神秩序的容器。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/uqd6BPnqLlvfQ2mdcEo0Tg"
 writing_type: "品牌特稿（Brand Features）"

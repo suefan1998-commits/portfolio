@@ -755,6 +755,15 @@
     });
   });
 
+  document.querySelectorAll(".js-back-link").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (document.referrer && new URL(document.referrer).origin === window.location.origin && window.history.length > 1) {
+        event.preventDefault();
+        window.history.back();
+      }
+    });
+  });
+
   const archive = document.querySelector(".archive-title");
   if (!archive) return;
   const typeButtons = Array.from(document.querySelectorAll(".type-filter"));

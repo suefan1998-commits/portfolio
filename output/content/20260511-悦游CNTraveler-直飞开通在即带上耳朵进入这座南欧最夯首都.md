@@ -1,6 +1,7 @@
 ---
 id: "20260511-悦游CNTraveler-直飞开通在即带上耳朵进入这座南欧最夯首都"
 title: "直飞开通在即！带上耳朵，进入这座南欧最夯首都"
+keyline: "葡萄牙里斯本，以法朵音乐串联的心灵之旅。"
 source_type: "新媒体"
 source: "https://mp.weixin.qq.com/s/vZXXtnQycRFfxpibtsoylw"
 writing_type: "城市、旅行与生活方式（Travel & Lifestyle）"

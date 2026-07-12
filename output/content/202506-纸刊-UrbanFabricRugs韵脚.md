@@ -1,6 +1,7 @@
 ---
 id: "202506-纸刊-UrbanFabricRugs韵脚"
 title: "Urban Fabric Rugs｜韵脚"
+keyline: "Urban Fabric Rugs设计解读。"
 source_type: "纸刊"
 source: "202506-纸刊-UrbanFabricRugs韵脚"
 writing_type: "品牌特稿（Brand Features）"

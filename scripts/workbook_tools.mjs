@@ -5,6 +5,7 @@ import { FileBlob, SpreadsheetFile, Workbook } from "@oai/artifact-tool";
 const HEADERS = [
   "作品ID",
   "标题",
+  "Keyline",
   "来源类型",
   "链接/文件名",
   "撰稿类型",
@@ -34,51 +35,48 @@ async function createTemplate(outputPath) {
   const sheet = workbook.worksheets.add("作品台账");
   sheet.showGridLines = false;
 
-  sheet.getRange("A1:M1").values = [HEADERS];
-  sheet.getRange("A1:M1").format = {
+  sheet.getRange("A1:N1").values = [HEADERS];
+  sheet.getRange("A1:N1").format = {
     fill: { color: "#EAE7DE" },
     font: { color: "#111827", bold: true },
     wrapText: true,
   };
-  sheet.getRange("A1:M1").format.borders = {
+  sheet.getRange("A1:N1").format.borders = {
     top: { style: "thin", color: "#111111" },
     bottom: { style: "thin", color: "#111111" },
   };
 
-  sheet.getRange("A2:M201").format = {
+  sheet.getRange("A2:N201").format = {
     font: { color: "#111827" },
     wrapText: true,
   };
-  sheet.getRange("A2:M201").format.borders = {
+  sheet.getRange("A2:N201").format.borders = {
     insideHorizontal: { style: "thin", color: "#E5E7EB" },
   };
 
   sheet.getRange("A:A").format.columnWidth = 14;
   sheet.getRange("B:B").format.columnWidth = 24;
-  sheet.getRange("C:C").format.columnWidth = 12;
-  sheet.getRange("D:D").format.columnWidth = 42;
-  sheet.getRange("E:E").format.columnWidth = 16;
-  sheet.getRange("F:F").format.columnWidth = 20;
-  sheet.getRange("G:G").format.columnWidth = 18;
-  sheet.getRange("H:H").format.columnWidth = 14;
+  sheet.getRange("C:C").format.columnWidth = 42;
+  sheet.getRange("D:D").format.columnWidth = 12;
+  sheet.getRange("E:E").format.columnWidth = 42;
+  sheet.getRange("F:F").format.columnWidth = 16;
+  sheet.getRange("G:G").format.columnWidth = 20;
+  sheet.getRange("H:H").format.columnWidth = 18;
   sheet.getRange("I:I").format.columnWidth = 14;
-  sheet.getRange("J:J").format.columnWidth = 16;
-  sheet.getRange("K:K").format.columnWidth = 14;
-  sheet.getRange("L:L").format.columnWidth = 28;
+  sheet.getRange("J:J").format.columnWidth = 14;
+  sheet.getRange("K:K").format.columnWidth = 16;
+  sheet.getRange("L:L").format.columnWidth = 14;
   sheet.getRange("M:M").format.columnWidth = 28;
-  sheet.getRange("H2:H201").setNumberFormat("yyyy-mm-dd");
+  sheet.getRange("N:N").format.columnWidth = 28;
+  sheet.getRange("I2:I201").setNumberFormat("yyyy-mm-dd");
 
   sheet.dataValidations.add({
-    range: "C2:C201",
+    range: "D2:D201",
     rule: { type: "list", values: SOURCE_VALUES },
   });
   sheet.dataValidations.add({
-    range: "E2:E201",
+    range: "F2:F201",
     rule: { type: "list", values: WRITING_TYPE_VALUES },
-  });
-  sheet.dataValidations.add({
-    range: "I2:I201",
-    rule: { type: "list", values: PUBLIC_VALUES },
   });
   sheet.dataValidations.add({
     range: "J2:J201",
@@ -86,6 +84,10 @@ async function createTemplate(outputPath) {
   });
   sheet.dataValidations.add({
     range: "K2:K201",
+    rule: { type: "list", values: PUBLIC_VALUES },
+  });
+  sheet.dataValidations.add({
+    range: "L2:L201",
     rule: { type: "list", values: STATUS_VALUES },
   });
 
@@ -97,6 +99,7 @@ async function createTemplate(outputPath) {
     ["字段", "填写说明"],
     ["作品ID", "可留空，整理入库时自动生成。"],
     ["标题", "可留空；新媒体链接会尽量从网页标题提取，纸刊文件名会作为兜底标题。"],
+    ["Keyline", "必填。一句话总结文章核心内容、报道方法和体现的个人能力。"],
     ["来源类型", "填写“新媒体”或“纸刊”。"],
     ["链接/文件名", "新媒体填链接；纸刊填 input/inbox 文件夹内的文件名。"],
     ["撰稿类型", "主分类，例如人物与访谈、城市、旅行与生活方式、设计、建筑与文化、商业、科技与社会、品牌特稿。"],
@@ -115,7 +118,7 @@ async function createTemplate(outputPath) {
   };
   guide.getRange("A:B").format.columnWidth = 28;
   guide.getRange("B:B").format.columnWidth = 72;
-  guide.getRange("A1:B14").format = { wrapText: true };
+  guide.getRange("A1:B15").format = { wrapText: true };
   guide.freezePanes.freezeRows(1);
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true });
@@ -124,7 +127,7 @@ async function createTemplate(outputPath) {
 
   const preview = await workbook.render({
     sheetName: "作品台账",
-    range: "A1:M12",
+    range: "A1:N12",
     scale: 1,
     format: "png",
   });
