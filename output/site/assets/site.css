@@ -653,13 +653,21 @@
           font-weight: 400;
           line-height: 1.9;
         }
+        .article-keyline {
+          margin: 28px 0 0;
+          color: var(--ink);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.9;
+        }
         .article-source-link a {
           border-bottom: 1px solid currentColor;
         }
         .article-source-link a:hover {
           color: var(--ink);
         }
-        .article-source-link + .body {
+        .article-source-link + .body,
+        .article-keyline + .body {
           margin-top: 24px;
         }
         .body { margin-top: 44px; }

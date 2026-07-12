@@ -556,6 +556,7 @@ def summary_frontmatter(article: dict, status: str = "待审核") -> str:
         "article_image": article.get("article_image", ""),
         "source_kind": article.get("source_kind", ""),
         "summary_status": status,
+        "keyline": article.get("keyline", ""),
         "notes": article.get("notes", ""),
     }
     lines = ["---"]
@@ -570,10 +571,12 @@ def summary_frontmatter(article: dict, status: str = "待审核") -> str:
 
 
 def split_article_sections(body: str) -> list[tuple[str, list[str]]]:
+    blocks = [item.strip() for item in body.split("\n\n") if item.strip()]
+    has_headings = any(markdown_heading(block) for block in blocks)
     sections: list[tuple[str, list[str]]] = []
-    current_title = "精选节选"
+    current_title = "" if has_headings else "精选节选"
     current_paragraphs: list[str] = []
-    for block in [item.strip() for item in body.split("\n\n") if item.strip()]:
+    for block in blocks:
         heading = markdown_heading(block)
         if heading:
             if current_paragraphs:
@@ -619,12 +622,13 @@ def draft_overview(article: dict, sections: list[tuple[str, list[str]]]) -> str:
 
 def draft_summary_body(article: dict) -> str:
     sections = split_article_sections(str(article.get("body") or ""))
-    lines = ["【概述】", draft_overview(article, sections)]
+    lines = []
     for title, paragraphs in sections:
         ranked = sorted(paragraphs, key=paragraph_score, reverse=True)[:2]
         if not ranked:
             continue
-        lines.extend(["", f"## {title}"])
+        if title:
+            lines.extend(["", f"## {title}"])
         for paragraph in ranked:
             lines.extend(["", f"……{trim_text(paragraph, 260).strip('。')}。……"])
     return "\n".join(lines).strip()
@@ -635,8 +639,10 @@ def ensure_summary_draft(article: dict) -> bool:
     if path.exists():
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
+    draft = dict(article)
+    draft["keyline"] = draft_overview(article, split_article_sections(str(article.get("body") or "")))
     path.write_text(
-        summary_frontmatter(article, "待审核") + "\n\n" + draft_summary_body(article) + "\n",
+        summary_frontmatter(draft, "待审核") + "\n\n" + draft_summary_body(article) + "\n",
         encoding="utf-8",
     )
     return True
@@ -723,8 +729,6 @@ def ingest() -> None:
                 raise RuntimeError("来源类型必须是“新媒体”或“纸刊”")
 
             work_id = write_article(row, title, text, source_kind)
-            article = parse_article(CONTENT / f"{work_id}.md")
-            ensure_summary_draft(article)
             updates.append(
                 {
                     "rowIndex": row.row_index,
@@ -746,6 +750,8 @@ def ingest() -> None:
 
     update_registry_status(updates)
     print(f"入库完成：新增或更新 {processed} 篇，状态更新 {len(updates)} 条。")
+    if processed:
+        print("下一步：请在对话中确认 AI 生成的 keyline 与章节精选后，再写入 summary。")
 
 
 def append_note(old_note: str, new_note: str) -> str:
@@ -834,6 +840,9 @@ def public_body(article: dict) -> str:
 
 
 def public_preview(article: dict, limit: int = 220) -> str:
+    keyline = normalize_spaces(article.get("keyline"))
+    if confirmed_summary(article) and keyline:
+        return trim_text(keyline, limit)
     body = public_body(article)
     if not body:
         return "摘要待确认。请点击阅读原文查看完整作品。"
@@ -1329,7 +1338,14 @@ def build_site() -> None:
         )
 
     for article in articles:
-        body_html, toc = article_body_and_toc(public_body(article))
+        body_source = public_body(article)
+        keyline = normalize_spaces(article.get("keyline"))
+        keyline_html = (
+            f'<p class="article-keyline">{html_escape(keyline)}</p>'
+            if confirmed_summary(article) and keyline
+            else ""
+        )
+        body_html, toc = article_body_and_toc(body_source)
         tags = " ".join(f"<span>{html_escape(tag)}</span>" for tag in article.get("tags", []))
         article_image = site_image_src(article.get("article_image"), "../")
         article_image_html = (
@@ -1353,6 +1369,7 @@ def build_site() -> None:
               <div class="article-content">
                 <a class="back-link" href="../archive.html">返回作品总览</a>
                 <header class="article-header">
+                  <p>Published work</p>
                   <h1>{html_escape(article.get('title'))}</h1>
                   <div class="meta">
                     <span>{html_escape(site_media_name(article.get('media')))}</span>
@@ -1361,6 +1378,7 @@ def build_site() -> None:
                     {tags}
                   </div>
                 </header>
+                {keyline_html}
                 {source_link_html(article, "article-source-link")}
                 <div class="body">{body_html if confirmed_summary(article) else '<p>摘要待确认。请点击阅读原文查看完整作品。</p>'}</div>
               </div>
@@ -2413,13 +2431,21 @@ def write_css() -> None:
           font-weight: 400;
           line-height: 1.9;
         }
+        .article-keyline {
+          margin: 28px 0 0;
+          color: var(--ink);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.9;
+        }
         .article-source-link a {
           border-bottom: 1px solid currentColor;
         }
         .article-source-link a:hover {
           color: var(--ink);
         }
-        .article-source-link + .body {
+        .article-source-link + .body,
+        .article-keyline + .body {
           margin-top: 24px;
         }
         .body { margin-top: 44px; }
@@ -3014,6 +3040,10 @@ def make_pdf(query: str, full_text: bool = False) -> Path:
             story.append(title_para)
             meta = f"{article.get('media') or ''} | {article.get('publish_date') or ''} | {display_writing_type(article.get('writing_type') or '')}"
             story.append(Paragraph(html_escape(meta), small))
+            if not full_text and confirmed_summary(article):
+                keyline = normalize_spaces(article.get("keyline"))
+                if keyline:
+                    story.append(Paragraph(html_escape(keyline), base))
             url = original_url(article)
             if url:
                 story.append(

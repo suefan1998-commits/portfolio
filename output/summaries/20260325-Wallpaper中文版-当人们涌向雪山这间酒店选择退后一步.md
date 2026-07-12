@@ -12,11 +12,9 @@ featured: "否"
 article_image: "20260325-Wallpaper中文版.webp"
 source_kind: "web"
 summary_status: "已确认"
+keyline: "面对雪山，设计保持克制——大乐之野（德钦梅里雪山店）项目报道。"
 notes: "从旧版Word作品集一次性导入，正文取自Word文档"
 ---
-
-【概述】
-面对雪山，设计保持克制——大乐之野（德钦梅里雪山店）项目报道。
 
 ## Preface
 

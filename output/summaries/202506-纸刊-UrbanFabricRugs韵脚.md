@@ -12,11 +12,9 @@ featured: "否"
 article_image: "202506-Wallpaper中文版-韵脚.png"
 source_kind: "print"
 summary_status: "已确认"
+keyline: "Urban Fabric Rugs设计解读。"
 notes: "从旧版Word作品集一次性导入，正文取自Word文档"
 ---
-
-【概述】
-Urban Fabric Rugs设计解读。
 
 ## 精选节选
 

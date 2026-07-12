@@ -12,11 +12,9 @@ featured: "是"
 article_image: "20260108-Wallpaper中文版.jpg"
 source_kind: "web"
 summary_status: "已确认"
+keyline: "昙花一现的国家自信，以及背后脆弱的结构土壤。"
 notes: ""
 ---
-
-【概述】
-昙花一现的国家自信，以及背后脆弱的结构土壤。
 
 ## Preface
 

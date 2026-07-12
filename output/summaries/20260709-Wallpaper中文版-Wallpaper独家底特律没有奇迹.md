@@ -12,11 +12,9 @@ featured: "否"
 article_image: "20260709-Wallpaper中文版.jpg"
 source_kind: "web"
 summary_status: "已确认"
+keyline: "从“汽车之城”到“设计之城”，底特律做对了什么？"
 notes: ""
 ---
-
-【概述】
-从“汽车之城”到“设计之城”，底特律做对了什么？
 
 ## Preface
 

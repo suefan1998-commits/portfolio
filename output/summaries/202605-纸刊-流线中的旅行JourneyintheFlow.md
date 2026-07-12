@@ -12,11 +12,9 @@ featured: "否"
 article_image: "202605-Wallpaper中文版-流线中的旅行.png"
 source_kind: "print"
 summary_status: "已确认"
+keyline: "Louis Vuitton与设计师Marc Newson合作的首款铝制拉杆箱Louis Vuitton Horizon Aluminum设计解读。"
 notes: "从旧版Word作品集一次性导入，正文取自Word文档"
 ---
-
-【概述】
-Louis Vuitton与设计师Marc Newson合作的首款铝制拉杆箱Louis Vuitton Horizon Aluminum设计解读。
 
 ## 精选节选
 
@@ -31,4 +29,3 @@ Louis Vuitton与设计师Marc Newson合作的首款铝制拉杆箱Louis Vuitton 
 当今天的旅行者拖着箱子走过机场光洁的大理石地面，或是从高铁行李架上单手取下行李时，那份举重若轻的从容并非偶然。Louis Vuitton Horizon Aluminum的诞生，既是对百年设计的回应，更是对人如何在旅途中安放秩序的持续思考：在一个越来越高速流动的世界里，在一个科技进步的声浪不断涌起的潮流中，旅行箱可以以一种克制的方式，静默无声却持续有力地辅助每一次旅途的完成，把空间与注意力归还给路上的风景、偶遇，以及那些尚未发生的故事。
 
 （编辑：zhuoran）
-

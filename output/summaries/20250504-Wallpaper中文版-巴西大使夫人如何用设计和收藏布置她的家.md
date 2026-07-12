@@ -12,11 +12,9 @@ featured: "是"
 article_image: "20250504-Wallpaper中文版.webp"
 source_kind: "web"
 summary_status: "已确认"
+keyline: "专访巴西驻中国大使馆及大使夫人，从室内家居看巴西设计风潮。"
 notes: "从旧版Word作品集一次性导入，正文取自Word文档"
 ---
-
-【概述】
-专访巴西驻中国大使馆及大使夫人，从室内家居看巴西设计风潮。
 
 ## Preface
 

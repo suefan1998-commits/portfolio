@@ -12,11 +12,9 @@ featured: "否"
 article_image: "20250318-Wallpaper中文版.png"
 source_kind: "web"
 summary_status: "已确认"
+keyline: "Aesop伊索海南首店设计解读，以海藻为灵感，呈现品牌款待哲学。"
 notes: "从旧版Word作品集一次性导入，正文取自Word文档"
 ---
-
-【概述】
-Aesop伊索海南首店设计解读，以海藻为灵感，呈现品牌款待哲学。
 
 ## Preface
 
