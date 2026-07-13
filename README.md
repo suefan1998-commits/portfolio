@@ -85,6 +85,20 @@
 
 首次运行时会进入 Vercel 登录和项目确认流程；如果不想使用命令行，也可以进入 Vercel Drop，把 `output/site/` 文件夹拖拽上传。
 
+发布腾讯云服务器国内版：
+
+```bash
+./portfolio.sh deploy-tencent-server
+```
+
+首次使用前需要复制 `.env.tencent-server.example` 为 `.env.tencent-server`，并填写服务器公网 IP、SSH 用户名、端口和远程目录。
+
+安全约束：
+
+- `.env.tencent-server` 只保存在本机，已被 Git 忽略；不要把真实服务器地址、私钥或备案号写入示例文件。
+- SSH 私钥不要放在项目文件夹内，建议放在 `~/.ssh/`，并在 `.env.tencent-server` 中只填写路径。
+- 自动部署默认禁用密码 SSH 和交互式登录，只允许公钥认证；如果失败，先检查服务器公钥和安全组，不要改成密码部署。
+
 生成摘要版 PDF，例如文旅类岗位：
 
 ```bash
@@ -114,6 +128,7 @@
 ```bash
 ./portfolio.sh publish "更新作品集和网站"
 ./portfolio.sh deploy-vercel
+./portfolio.sh deploy-tencent-server
 ```
 
 ## 网站上线
@@ -122,7 +137,7 @@
 
 - GitHub：手动备份代码和 `output/site/` 静态网站产物。
 - Vercel：今天先上线全球版。
-- 腾讯云：域名注册、实名认证和 ICP 备案并行推进；备案通过后上线国内版。
+- 腾讯云：域名注册、实名认证和 ICP 备案并行推进；国内版通过腾讯云 CVM + Nginx 上线。
 
 ### GitHub 备份
 
@@ -167,20 +182,56 @@ https://your-project.vercel.app
 
 ### 腾讯云国内版
 
-备案通过前可以同步准备：
+国内版使用腾讯云服务器承载 `output/site/` 静态网站。默认部署目录为：
 
-- 确认域名实名认证和 ICP 备案资料已提交。
-- 创建 COS 存储桶，用于后续上传 `output/site/`。
-- 备案通过前不要把备案主域名正式接入国内网站服务。
+```text
+/var/www/sufan-portfolio
+```
+
+首次部署前，在本机创建服务器配置：
+
+```bash
+cp .env.tencent-server.example .env.tencent-server
+```
+
+然后填写：
+
+```text
+TENCENT_SERVER_HOST=<服务器公网 IP>
+TENCENT_SERVER_USER=root
+TENCENT_SERVER_PORT=22
+TENCENT_SERVER_PATH=/var/www/sufan-portfolio
+TENCENT_SERVER_SSH_KEY=<可选，本机 SSH 私钥路径>
+ICP_BEIAN_TEXT=
+```
+
+服务器需要提前准备：
+
+- 安装 Nginx。
+- 安全组放行 `80`、`443`；`22` 端口只允许自己的固定 IP 或可信办公网络访问。
+- SSH 建议只允许密钥登录，禁用 root 密码登录；如必须用 root，至少关闭密码登录并限制来源 IP。
+- 将 `deploy/nginx/sufan-portfolio.conf` 放到 Nginx 站点配置中，并让 Nginx 加载。
+- 运行 `sudo nginx -t` 确认配置无误。
+
+备案中可以先用公网 IP 测试：
+
+```bash
+./portfolio.sh deploy-tencent-server
+```
 
 备案通过后：
 
-1. 把 `output/site/` 全部内容上传到腾讯云 COS。
-2. 开启静态网站托管，首页文档设为 `index.html`。
-3. 绑定备案通过的域名，例如 `www.<你的域名>` 或 `cn.<你的域名>`。
-4. 配置 HTTPS 证书。
-5. 在网站页脚增加 ICP 备案号展示和链接。
+1. 在腾讯云 DNS 中把 `www.sufan-freelancewriter.com.cn` 解析到服务器公网 IP。
+2. 可选：把根域名 `sufan-freelancewriter.com.cn` 也解析到同一 IP，并在 Nginx 中跳转到 `www`。
+3. 申请并配置 HTTPS 证书，并把 HTTP 自动跳转到 HTTPS；备案完成后不要长期把公网 IP 当作正式入口。
+4. 在 `.env.tencent-server` 填写 `ICP_BEIAN_TEXT`。
+5. 重新运行 `./portfolio.sh deploy-tencent-server`。
 6. 验证首页、作品总览、单篇文章页、CSS 和图片资源都能访问。
+
+公开产物边界：
+
+- 网站只发布 `output/site/` 中的静态文件，不发布 `portfolio_registry.xlsx`、`.env.tencent-server`、`.vercel/` 或 `output/content/`。
+- 联系方式页的 PDF 下载只使用最新 `SuFAN全部作品集-摘要版.pdf`；全文版 PDF 不默认复制到网站产物。
 
 日常更新流程：
 
@@ -188,9 +239,8 @@ https://your-project.vercel.app
 ./portfolio.sh ingest
 ./portfolio.sh publish "更新作品集网站"
 ./portfolio.sh deploy-vercel
+./portfolio.sh deploy-tencent-server
 ```
-
-国内版上线后，再把同一份 `output/site/` 上传到腾讯云 COS。
 
 ## 处理规则
 

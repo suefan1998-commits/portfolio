@@ -181,6 +181,22 @@
           margin: 0 auto;
           padding: 56px 0 108px;
         }
+        .site-footer {
+          width: min(1180px, calc(100% - 48px));
+          margin: -72px auto 40px;
+          padding-top: 18px;
+          border-top: 1px solid var(--line);
+          color: var(--muted);
+          font-size: 13px;
+          line-height: 1.6;
+        }
+        .site-footer a {
+          color: inherit;
+          text-decoration: none;
+        }
+        .site-footer a:hover {
+          color: var(--ink);
+        }
         .page-title,
         .about-hero {
           position: relative;

@@ -8,6 +8,7 @@ import html
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -59,6 +60,7 @@ PUBLIC = OUTPUT / "site"
 ASSETS = INPUT / "assets"
 PDF_DIR = OUTPUT / "pdf"
 TMP = WORK / "tmp"
+TENCENT_ENV = ROOT / ".env.tencent-server"
 NODE = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node")
 NODE_MODULES = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules")
 PNPM = Path("/Users/Sue/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback/pnpm")
@@ -1424,6 +1426,42 @@ def write_static_site_metadata() -> None:
     (PUBLIC / ".nojekyll").write_text("", encoding="utf-8")
 
 
+def load_env_file(path: Path) -> dict[str, str]:
+    values: dict[str, str] = {}
+    if not path.exists():
+        return values
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        values[key.strip()] = value.strip().strip('"').strip("'")
+    return values
+
+
+def config_value(config: dict[str, str], key: str, default: str = "") -> str:
+    return os.environ.get(key, config.get(key, default)).strip()
+
+
+def path_inside(child: Path, parent: Path) -> bool:
+    try:
+        child.resolve().relative_to(parent.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def icp_beian_html() -> str:
+    text = config_value(load_env_file(TENCENT_ENV), "ICP_BEIAN_TEXT")
+    if not text:
+        return ""
+    return (
+        '<footer class="site-footer">'
+        f'<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{html_escape(text)}</a>'
+        "</footer>"
+    )
+
+
 def run_git(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["git", *args],
@@ -1520,6 +1558,102 @@ def deploy_vercel() -> None:
         raise SystemExit("找不到 Vercel CLI。也可以进入 Vercel Drop 手动上传 output/site/ 文件夹。")
 
     subprocess.run(command, cwd=ROOT, env=env, check=True)
+
+
+def deploy_tencent_server() -> None:
+    config = load_env_file(TENCENT_ENV)
+    host = config_value(config, "TENCENT_SERVER_HOST")
+    user = config_value(config, "TENCENT_SERVER_USER", "root")
+    port = config_value(config, "TENCENT_SERVER_PORT", "22")
+    remote_path = config_value(config, "TENCENT_SERVER_PATH", "/var/www/sufan-portfolio")
+    ssh_key = config_value(config, "TENCENT_SERVER_SSH_KEY")
+
+    missing = [
+        name
+        for name, value in {
+            "TENCENT_SERVER_HOST": host,
+            "TENCENT_SERVER_USER": user,
+            "TENCENT_SERVER_PORT": port,
+            "TENCENT_SERVER_PATH": remote_path,
+        }.items()
+        if not value
+    ]
+    if missing:
+        raise SystemExit(
+            "缺少腾讯云服务器配置："
+            + "、".join(missing)
+            + "。请复制 .env.tencent-server.example 为 .env.tencent-server 后填写。"
+        )
+
+    rsync = shutil.which("rsync")
+    ssh = shutil.which("ssh")
+    if not rsync or not ssh:
+        raise SystemExit("找不到 rsync 或 ssh，无法自动部署到腾讯云服务器。")
+
+    build_site()
+    index = PUBLIC / "index.html"
+    if not index.exists():
+        raise SystemExit("网站生成失败：未找到 output/site/index.html。")
+
+    if ssh_key and path_inside(Path(ssh_key).expanduser(), ROOT):
+        raise SystemExit("请不要把 SSH 私钥放在项目文件夹内；建议放在 ~/.ssh/ 并只在 .env.tencent-server 中填写路径。")
+
+    ssh_args = [
+        ssh,
+        "-p",
+        port,
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "PasswordAuthentication=no",
+        "-o",
+        "PubkeyAuthentication=yes",
+        "-o",
+        "IdentitiesOnly=yes",
+        "-o",
+        "StrictHostKeyChecking=accept-new",
+    ]
+    if ssh_key:
+        ssh_args.extend(["-i", ssh_key])
+    remote = f"{user}@{host}"
+    quoted_path = shlex.quote(remote_path)
+    quoted_user = shlex.quote(user)
+
+    subprocess.run(
+        [
+            *ssh_args,
+            remote,
+            f"sudo mkdir -p {quoted_path} && sudo chown -R {quoted_user}:{quoted_user} {quoted_path}",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+
+    ssh_command = " ".join(shlex.quote(part) for part in ssh_args)
+    subprocess.run(
+        [
+            rsync,
+            "-az",
+            "--delete",
+            "-e",
+            ssh_command,
+            f"{PUBLIC}/",
+            f"{remote}:{remote_path.rstrip('/')}/",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+
+    subprocess.run(
+        [
+            *ssh_args,
+            remote,
+            "sudo nginx -t && sudo systemctl reload nginx",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+    print(f"腾讯云服务器部署完成：http://{host}/")
 
 
 def site_nav(asset_prefix: str, active: str) -> str:
@@ -1778,6 +1912,7 @@ def article_row(article: dict, prefix: str = "") -> str:
 
 
 def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active: str = "") -> None:
+    footer = icp_beian_html()
     path.write_text(
         textwrap.dedent(
             f"""\
@@ -1801,6 +1936,7 @@ def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active
               <div class="shell">
                 {textwrap.dedent(body).strip()}
               </div>
+              {footer}
               {textwrap.dedent(site_script()).strip()}
             </body>
             </html>
@@ -1994,6 +2130,22 @@ def write_css() -> None:
           width: min(1180px, calc(100% - 48px));
           margin: 0 auto;
           padding: 56px 0 108px;
+        }
+        .site-footer {
+          width: min(1180px, calc(100% - 48px));
+          margin: -72px auto 40px;
+          padding-top: 18px;
+          border-top: 1px solid var(--line);
+          color: var(--muted);
+          font-size: 13px;
+          line-height: 1.6;
+        }
+        .site-footer a {
+          color: inherit;
+          text-decoration: none;
+        }
+        .site-footer a:hover {
+          color: var(--ink);
         }
         .page-title,
         .about-hero {
@@ -3187,6 +3339,7 @@ def parse_args() -> argparse.Namespace:
     publish_cmd.add_argument("message", help="本次备份说明，例如：新增某某作品")
 
     sub.add_parser("deploy-vercel", help="更新静态网站并通过 Vercel CLI 发布全球版")
+    sub.add_parser("deploy-tencent-server", help="更新静态网站并部署到腾讯云服务器")
     return parser.parse_args()
 
 
@@ -3210,6 +3363,8 @@ def main() -> None:
         publish_site(args.message)
     elif args.command == "deploy-vercel":
         deploy_vercel()
+    elif args.command == "deploy-tencent-server":
+        deploy_tencent_server()
 
 
 if __name__ == "__main__":
