@@ -22,7 +22,12 @@
 <a class="nav-link is-active" href="../archive.html">作品总览</a>
 <a class="nav-link" href="../contact.html">联系方式</a>
         <button class="theme-toggle" type="button" aria-label="切换明暗模式" aria-pressed="false">
-          <span class="theme-symbol" aria-hidden="true">☀️</span>
+          <span class="theme-option theme-option-sun" aria-hidden="true">
+            <span class="theme-icon">☀︎</span>
+          </span>
+          <span class="theme-option theme-option-moon" aria-hidden="true">
+            <span class="theme-icon">☽</span>
+          </span>
           <span class="visually-hidden">切换明暗模式</span>
         </button>
       </nav>
@@ -113,12 +118,16 @@
   const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   const initial = stored || (prefersDark ? "dark" : "light");
   const button = document.querySelector(".theme-toggle");
-  const setTheme = (theme) => {
+  let transitionTimer = 0;
+  const setTheme = (theme, animate = false) => {
+    if (animate) {
+      window.clearTimeout(transitionTimer);
+      root.classList.add("theme-transition");
+      transitionTimer = window.setTimeout(() => root.classList.remove("theme-transition"), 520);
+    }
     root.dataset.theme = theme;
     if (button) {
       button.dataset.theme = theme;
-      const symbol = button.querySelector(".theme-symbol");
-      if (symbol) symbol.textContent = theme === "dark" ? "🌙" : "☀️";
       button.setAttribute("aria-label", theme === "dark" ? "切换到 Light Mode" : "切换到 Dark Mode");
       button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
     }
@@ -127,7 +136,7 @@
   button?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     localStorage.setItem("portfolio-theme", next);
-    setTheme(next);
+    setTheme(next, true);
   });
 
   document.querySelectorAll(".copy-social").forEach((copyButton) => {

@@ -22,7 +22,12 @@
 <a class="nav-link is-active" href="archive.html">作品总览</a>
 <a class="nav-link" href="contact.html">联系方式</a>
         <button class="theme-toggle" type="button" aria-label="切换明暗模式" aria-pressed="false">
-          <span class="theme-symbol" aria-hidden="true">☀️</span>
+          <span class="theme-option theme-option-sun" aria-hidden="true">
+            <span class="theme-icon">☀︎</span>
+          </span>
+          <span class="theme-option theme-option-moon" aria-hidden="true">
+            <span class="theme-icon">☽</span>
+          </span>
           <span class="visually-hidden">切换明暗模式</span>
         </button>
       </nav>
@@ -48,6 +53,18 @@
           </div>
         </section>
         <section class="archive-view archive-grid-view is-active" data-view-panel="grid">
+    <article class="work-card" data-work-type="品牌特稿">
+      <a class="work-card-image" href="articles/20260713-Wallpaper中文版-总部发言探秘On昂跑瑞士总部和OnLabs.html">
+        <figure class="grid-image"><img class="image-main" src="assets/media/20260713-wallpaper-2151974f.jpg" alt="总部发言｜探秘On昂跑瑞士总部和On Labs" loading="lazy"></figure>
+      </a>
+      <div class="work-card-copy">
+        <p class="card-type">品牌特稿</p>
+        <h2><a href="articles/20260713-Wallpaper中文版-总部发言探秘On昂跑瑞士总部和OnLabs.html">总部发言｜探秘On昂跑瑞士总部和On Labs</a></h2>
+        <p class="card-meta-line">Wallpaper中文版｜2026.07.13</p>
+      </div>
+    </article>
+
+
     <article class="work-card" data-work-type="设计、建筑与文化">
       <a class="work-card-image" href="articles/20260709-Wallpaper中文版-Wallpaper独家底特律没有奇迹.html">
         <figure class="grid-image"><img class="image-main" src="assets/media/20260709-wallpaper-b5c219a3.jpg" alt="底特律没有奇迹" loading="lazy"></figure>
@@ -396,6 +413,17 @@
     </article>
     </section>
         <section class="archive-view archive-list-view" data-view-panel="list"><div class="archive-list">
+    <article class="archive-item" data-work-type="品牌特稿">
+      <figure class="archive-image"><img class="image-main" src="assets/media/20260713-wallpaper-2151974f.jpg" alt="总部发言｜探秘On昂跑瑞士总部和On Labs" loading="lazy"></figure>
+      <div class="archive-main">
+        <p class="card-type">品牌特稿</p>
+        <h3><a href="articles/20260713-Wallpaper中文版-总部发言探秘On昂跑瑞士总部和OnLabs.html">总部发言｜探秘On昂跑瑞士总部和On Labs</a></h3>
+        <p class="card-meta-line">Wallpaper中文版｜2026.07.13</p>
+        <p class="source-link"><a href="https://mp.weixin.qq.com/s/sltXjeFueR1whbJ65NJWRw" target="_blank" rel="noopener noreferrer">阅读原文</a></p>
+      </div>
+    </article>
+
+
     <article class="archive-item" data-work-type="设计、建筑与文化">
       <figure class="archive-image"><img class="image-main" src="assets/media/20260709-wallpaper-b5c219a3.jpg" alt="底特律没有奇迹" loading="lazy"></figure>
       <div class="archive-main">
@@ -723,12 +751,16 @@
   const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   const initial = stored || (prefersDark ? "dark" : "light");
   const button = document.querySelector(".theme-toggle");
-  const setTheme = (theme) => {
+  let transitionTimer = 0;
+  const setTheme = (theme, animate = false) => {
+    if (animate) {
+      window.clearTimeout(transitionTimer);
+      root.classList.add("theme-transition");
+      transitionTimer = window.setTimeout(() => root.classList.remove("theme-transition"), 520);
+    }
     root.dataset.theme = theme;
     if (button) {
       button.dataset.theme = theme;
-      const symbol = button.querySelector(".theme-symbol");
-      if (symbol) symbol.textContent = theme === "dark" ? "🌙" : "☀️";
       button.setAttribute("aria-label", theme === "dark" ? "切换到 Light Mode" : "切换到 Dark Mode");
       button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
     }
@@ -737,7 +769,7 @@
   button?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     localStorage.setItem("portfolio-theme", next);
-    setTheme(next);
+    setTheme(next, true);
   });
 
   document.querySelectorAll(".copy-social").forEach((copyButton) => {

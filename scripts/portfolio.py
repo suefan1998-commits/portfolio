@@ -1673,7 +1673,12 @@ def site_nav(asset_prefix: str, active: str) -> str:
       <nav class="main-nav" aria-label="主导航">
         {links}
         <button class="theme-toggle" type="button" aria-label="切换明暗模式" aria-pressed="false">
-          <span class="theme-symbol" aria-hidden="true">☀️</span>
+          <span class="theme-option theme-option-sun" aria-hidden="true">
+            <span class="theme-icon">☀︎</span>
+          </span>
+          <span class="theme-option theme-option-moon" aria-hidden="true">
+            <span class="theme-icon">☽</span>
+          </span>
           <span class="visually-hidden">切换明暗模式</span>
         </button>
       </nav>
@@ -1690,12 +1695,16 @@ def site_script() -> str:
       const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
       const initial = stored || (prefersDark ? "dark" : "light");
       const button = document.querySelector(".theme-toggle");
-      const setTheme = (theme) => {
+      let transitionTimer = 0;
+      const setTheme = (theme, animate = false) => {
+        if (animate) {
+          window.clearTimeout(transitionTimer);
+          root.classList.add("theme-transition");
+          transitionTimer = window.setTimeout(() => root.classList.remove("theme-transition"), 520);
+        }
         root.dataset.theme = theme;
         if (button) {
           button.dataset.theme = theme;
-          const symbol = button.querySelector(".theme-symbol");
-          if (symbol) symbol.textContent = theme === "dark" ? "🌙" : "☀️";
           button.setAttribute("aria-label", theme === "dark" ? "切换到 Light Mode" : "切换到 Dark Mode");
           button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
         }
@@ -1704,7 +1713,7 @@ def site_script() -> str:
       button?.addEventListener("click", () => {
         const next = root.dataset.theme === "dark" ? "light" : "dark";
         localStorage.setItem("portfolio-theme", next);
-        setTheme(next);
+        setTheme(next, true);
       });
 
       document.querySelectorAll(".copy-social").forEach((copyButton) => {
@@ -1961,6 +1970,10 @@ def write_css() -> None:
           --line-strong: #161616;
           --image-soft: rgba(18, 18, 18, 0.08);
           --accent: #121212;
+          --switch-bg: #f2f2ef;
+          --switch-active: #ffffff;
+          --switch-active-ink: #121212;
+          --switch-shadow: rgba(18, 18, 18, 0.1);
           --radius: 18px;
           --ease: cubic-bezier(0.16, 1, 0.3, 1);
           font-family: "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -1977,6 +1990,10 @@ def write_css() -> None:
           --line-strong: #f2f2ee;
           --image-soft: rgba(242, 242, 238, 0.12);
           --accent: #f2f2ee;
+          --switch-bg: #24241f;
+          --switch-active: #f2f2ee;
+          --switch-active-ink: #11110f;
+          --switch-shadow: rgba(0, 0, 0, 0.28);
         }
         * { box-sizing: border-box; }
         html {
@@ -2002,6 +2019,35 @@ def write_css() -> None:
         button:focus-visible {
           outline: 1px solid var(--ink);
           outline-offset: 4px;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+          .theme-transition,
+          .theme-transition body,
+          .theme-transition .site-header,
+          .theme-transition .site-footer,
+          .theme-transition .shell,
+          .theme-transition .theme-toggle,
+          .theme-transition .theme-option,
+          .theme-transition .feature-card,
+          .theme-transition .work-card,
+          .theme-transition .archive-item,
+          .theme-transition .about-dashboard,
+          .theme-transition .field-card,
+          .theme-transition .contact-block,
+          .theme-transition .article-layout,
+          .theme-transition .article-visual,
+          .theme-transition .article-content,
+          .theme-transition .body,
+          .theme-transition .toc-panel,
+          .theme-transition a,
+          .theme-transition button {
+            transition:
+              background-color 420ms var(--ease),
+              color 420ms var(--ease),
+              border-color 420ms var(--ease),
+              box-shadow 420ms var(--ease),
+              opacity 420ms var(--ease);
+          }
         }
         @keyframes editorial-rise {
           from {
@@ -2098,21 +2144,44 @@ def write_css() -> None:
           color: var(--ink);
         }
         .theme-toggle {
-          display: inline-grid;
-          width: 34px;
-          height: 34px;
-          place-items: center;
-          border: 1px solid var(--line);
+          display: inline-flex;
+          align-items: center;
+          gap: 2px;
+          width: 74px;
+          height: 36px;
+          border: 0;
           border-radius: 999px;
-          padding: 0;
-          text-align: center;
+          padding: 3px;
+          background: var(--switch-bg);
+          color: var(--faint);
+          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 5%, transparent);
+          transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
         }
         .theme-toggle:hover {
-          background: var(--panel);
+          transform: translateY(-1px);
+          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
         }
-        .theme-symbol {
+        .theme-option {
+          position: relative;
+          display: grid;
+          width: 30px;
+          height: 30px;
+          place-items: center;
+          border-radius: 999px;
+          background: transparent;
+          color: currentColor;
+          transition: background-color 180ms var(--ease), color 180ms var(--ease), box-shadow 180ms var(--ease);
+        }
+        .theme-toggle[data-theme="light"] .theme-option-sun,
+        .theme-toggle[data-theme="dark"] .theme-option-moon {
+          background: var(--switch-active);
+          color: var(--switch-active-ink);
+          box-shadow: 0 2px 10px var(--switch-shadow);
+        }
+        .theme-icon {
           display: block;
-          font-size: 17px;
+          font-size: 19px;
+          font-weight: 400;
           line-height: 1;
         }
         .visually-hidden {
@@ -2151,7 +2220,6 @@ def write_css() -> None:
         .about-hero {
           position: relative;
           padding: 64px 0 44px;
-          border-top: 2px solid var(--line-strong);
           border-bottom: 1px solid var(--line);
         }
         .page-title h1,
@@ -2228,8 +2296,9 @@ def write_css() -> None:
           list-style: none;
           color: var(--ink);
           font-size: 16px;
-          font-weight: 400;
+          font-weight: 300;
           line-height: 1.9;
+          letter-spacing: 0.01em;
         }
         .hero-bio li {
           max-width: 760px;
