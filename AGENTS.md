@@ -40,7 +40,7 @@
 - 摘要 PDF 是公开产物；全文 PDF 不默认复制到网站产物。
 - `.env.tencent-server` 只保存在本机，真实服务器地址、私钥和备案信息不要写入示例文件。
 - 腾讯云部署路径是保留并加固的支持路径，不要默认移除。
-- Vercel 生产地址默认按 `https://sufan-portfolio.vercel.app` 处理，除非用户说明已变化。
+- 正式访问入口默认按 `https://sufan-freelancewriter.com.cn` 处理；`sufan-portfolio.vercel.app` 仅作为 Vercel 调试或回滚检查地址。
 
 ## 常用命令
 

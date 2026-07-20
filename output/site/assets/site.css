@@ -358,6 +358,9 @@
           border-top: 1px solid var(--line);
           border-bottom: 1px solid var(--line);
         }
+        .page-about .about-dashboard {
+          border-top: 0;
+        }
         .about-dashboard div {
           padding: 0 0 18px;
           border-bottom: 1px solid var(--line);
@@ -921,6 +924,7 @@
             padding: 20px 0;
           }
           .about-dashboard div:last-child { border-bottom: 0; }
+          .page-about .about-dashboard div { border-bottom: 0; }
           .feature-card h2 { font-size: 24px; }
           .feature-primary h2 { font-size: 30px; }
           .archive-item { grid-template-columns: 92px minmax(0, 1fr); gap: 14px; padding: 22px 0; }

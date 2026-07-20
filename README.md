@@ -211,10 +211,11 @@ cp .env.tencent-server.example .env.tencent-server
 
 SSH 私钥不要放在项目文件夹内，建议放在 `~/.ssh/`，并在 `.env.tencent-server` 中只填写路径。自动部署默认禁用密码 SSH 和交互式登录，只允许公钥认证；如果失败，先检查服务器公钥和安全组，不要改成密码部署。
 
-Vercel 生产地址默认使用：
+正式访问入口统一使用无 `www` 主域名：
 
 ```text
-https://sufan-portfolio.vercel.app
+https://sufan-freelancewriter.com.cn
 ```
 
+Vercel 仍保留为全球部署来源；`sufan-portfolio.vercel.app` 只作为部署调试或回滚检查使用，不作为对外访问入口。
 腾讯云国内版保留为支持路径，备案完成后应使用正式域名和 HTTPS，不要长期把公网 IP 当作正式入口。
