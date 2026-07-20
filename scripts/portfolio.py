@@ -2325,6 +2325,10 @@ def write_css() -> None:
           padding: 0 0 18px;
           border-bottom: 1px solid var(--line);
         }
+        .page-about .about-dashboard div {
+          padding-bottom: 0;
+          border-bottom: 0;
+        }
         .about-dashboard strong {
           display: block;
           color: var(--ink);
