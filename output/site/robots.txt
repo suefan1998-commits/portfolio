@@ -1,0 +1,46 @@
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: CCBot
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: Bytespider
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /assets/media/
+Disallow: /assets/*.pdf
+Disallow: /*.pdf$
+
+Sitemap: https://sufan-freelancewriter.com.cn/

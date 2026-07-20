@@ -187,8 +187,9 @@
         .theme-toggle {
           display: inline-flex;
           align-items: center;
-          gap: 2px;
-          width: 74px;
+          justify-content: space-between;
+          gap: 0;
+          width: 72px;
           height: 36px;
           border: 0;
           border-radius: 999px;

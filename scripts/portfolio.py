@@ -1424,6 +1424,33 @@ def build_site() -> None:
 def write_static_site_metadata() -> None:
     PUBLIC.mkdir(parents=True, exist_ok=True)
     (PUBLIC / ".nojekyll").write_text("", encoding="utf-8")
+    write_robots_txt()
+
+
+def write_robots_txt() -> None:
+    ai_crawlers = [
+        "GPTBot",
+        "ClaudeBot",
+        "CCBot",
+        "PerplexityBot",
+        "Bytespider",
+        "Google-Extended",
+        "Applebot-Extended",
+    ]
+    rules = ["User-agent: *", "Allow: /", ""]
+    for crawler in ai_crawlers:
+        rules.extend(
+            [
+                f"User-agent: {crawler}",
+                "Allow: /",
+                "Disallow: /assets/media/",
+                "Disallow: /assets/*.pdf",
+                "Disallow: /*.pdf$",
+                "",
+            ]
+        )
+    rules.append("Sitemap: https://sufan-freelancewriter.com.cn/")
+    (PUBLIC / "robots.txt").write_text("\n".join(rules), encoding="utf-8")
 
 
 def load_env_file(path: Path) -> dict[str, str]:
@@ -2160,8 +2187,9 @@ def write_css() -> None:
         .theme-toggle {
           display: inline-flex;
           align-items: center;
-          gap: 2px;
-          width: 74px;
+          justify-content: space-between;
+          gap: 0;
+          width: 72px;
           height: 36px;
           border: 0;
           border-radius: 999px;
