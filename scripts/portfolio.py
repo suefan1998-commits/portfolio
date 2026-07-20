@@ -980,131 +980,35 @@ def resolve_asset_path(value: object) -> Path | None:
     return None
 
 
-@dataclass
-class SiteImage:
-    fallback: str
-    webp: str
-    width: int
-
-
-IMAGE_VARIANTS = {
-    "thumb": {"width": 480, "quality": 82},
-    "large": {"width": 1000, "quality": 84},
-}
-
-
-def tool_path(name: str) -> str | None:
-    found = shutil.which(name)
-    if found:
-        return found
-    homebrew_path = Path("/opt/homebrew/bin") / name
-    if homebrew_path.exists():
-        return str(homebrew_path)
-    return None
-
-
-def derivative_is_current(target: Path, source: Path) -> bool:
-    return target.exists() and target.stat().st_mtime >= source.stat().st_mtime
-
-
-def write_resized_fallback(source: Path, target: Path, width: int) -> None:
-    if derivative_is_current(target, source):
-        return
-    target.parent.mkdir(parents=True, exist_ok=True)
-    tmp = target.with_name(f".{target.name}.tmp{target.suffix}")
-    try:
-        if target.suffix.lower() == ".png" and source.suffix.lower() == ".png":
-            shutil.copy2(source, tmp)
-            command = ["sips", "-Z", str(width), str(tmp)]
-        else:
-            command = [
-                "sips",
-                "-Z",
-                str(width),
-                "-s",
-                "format",
-                "jpeg",
-                "-s",
-                "formatOptions",
-                "82",
-                str(source),
-                "--out",
-                str(tmp),
-            ]
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-        tmp.replace(target)
-    finally:
-        if tmp.exists():
-            tmp.unlink()
-
-
-def write_webp_derivative(source: Path, target: Path, width: int, quality: int) -> bool:
-    if derivative_is_current(target, source):
-        return True
-    cwebp = tool_path("cwebp")
-    if not cwebp:
-        return False
-    target.parent.mkdir(parents=True, exist_ok=True)
-    tmp = target.with_name(f".{target.name}.tmp.webp")
-    command = [cwebp, "-quiet", "-q", str(quality), "-resize", str(width), "0", str(source), "-o", str(tmp)]
-    subprocess.run(command, check=True)
-    tmp.replace(target)
-    return True
-
-
-def site_image_asset(value: object, prefix: str = "", variant: str = "large") -> SiteImage | None:
+def site_image_src(value: object, prefix: str = "") -> str:
     text = normalize_spaces(value)
     if not text:
-        return None
+        return ""
     if is_remote_asset(text):
-        return SiteImage(text, "", 0)
+        return text
     source = resolve_asset_path(text)
     if not source:
-        return None
-    options = IMAGE_VARIANTS.get(variant, IMAGE_VARIANTS["large"])
-    width = int(options["width"])
-    quality = int(options["quality"])
+        return ""
     media_dir = PUBLIC / "assets" / "media"
     media_dir.mkdir(parents=True, exist_ok=True)
-    digest_input = f"{source.resolve()}:{source.stat().st_mtime_ns}:{source.stat().st_size}"
-    digest = hashlib.sha1(digest_input.encode("utf-8")).hexdigest()[:8]
-    stem = f"{slugify(source.stem)}-{digest}-{variant}"
-    source_suffix = source.suffix.lower()
-    keep_png = source_suffix == ".png" and source.stat().st_size <= 300 * 1024
-    fallback_suffix = ".png" if keep_png else ".jpg"
-    fallback = media_dir / f"{stem}{fallback_suffix}"
-    webp = media_dir / f"{stem}.webp"
-    write_resized_fallback(source, fallback, width)
-    has_webp = write_webp_derivative(source, webp, width, quality)
-    return SiteImage(
-        fallback=f"{prefix}assets/media/{fallback.name}",
-        webp=f"{prefix}assets/media/{webp.name}" if has_webp else "",
-        width=width,
-    )
+    digest = hashlib.sha1(str(source).encode("utf-8")).hexdigest()[:8]
+    name = f"{slugify(source.stem)}-{digest}{source.suffix.lower()}"
+    target = media_dir / name
+    if (
+        not target.exists()
+        or target.stat().st_size != source.stat().st_size
+        or target.stat().st_mtime < source.stat().st_mtime
+    ):
+        shutil.copy2(source, target)
+    return f"{prefix}assets/media/{name}"
 
 
-def site_image_src(value: object, prefix: str = "") -> str:
-    image = site_image_asset(value, prefix, "large")
-    return image.fallback if image else ""
-
-
-def picture_frame(class_name: str, image: SiteImage | str, alt: object) -> str:
+def picture_frame(class_name: str, src: str, alt: object) -> str:
+    safe_src = html_escape(src)
     safe_alt = html_escape(alt)
-    if isinstance(image, SiteImage):
-        safe_src = html_escape(image.fallback)
-        if image.webp:
-            safe_webp = html_escape(image.webp)
-            return (
-                f'<figure class="{class_name}">'
-                f'<picture><source srcset="{safe_webp}" type="image/webp">'
-                f'<img class="image-main" src="{safe_src}" alt="{safe_alt}" loading="lazy" decoding="async">'
-                "</picture></figure>"
-            )
-    else:
-        safe_src = html_escape(image)
     return (
         f'<figure class="{class_name}">'
-        f'<img class="image-main" src="{safe_src}" alt="{safe_alt}" loading="lazy" decoding="async">'
+        f'<img class="image-main" src="{safe_src}" alt="{safe_alt}" loading="lazy">'
         "</figure>"
     )
 
@@ -1371,7 +1275,7 @@ def build_site() -> None:
     types = ordered_site_writing_types(articles)
     media = media_names(articles)
     archive_articles = sorted(articles, key=lambda item: date_sort_desc(item.get("publish_date")))
-    hero_image = site_image_asset(profile_image_path(), "", "large")
+    hero_image = site_image_src(profile_image_path())
     hero_photo = (
         picture_frame("hero-photo", hero_image, "Su FAN")
         if hero_image
@@ -1461,7 +1365,7 @@ def build_site() -> None:
         )
         body_html, toc = article_body_and_toc(body_source)
         tags = " ".join(f"<span>{html_escape(tag)}</span>" for tag in article.get("tags", []))
-        article_image = site_image_asset(article.get("article_image"), "../", "large")
+        article_image = site_image_src(article.get("article_image"), "../")
         article_image_html = (
             picture_frame("article-hero-image", article_image, article.get("title"))
             if article_image
@@ -1941,8 +1845,8 @@ def about_page_html(articles: list[dict], types: list[str], media: list[str], he
     """
 
 
-def article_image_markup(article: dict, prefix: str, class_name: str, variant: str = "thumb") -> str:
-    image = site_image_asset(article.get("article_image"), prefix, variant)
+def article_image_markup(article: dict, prefix: str, class_name: str) -> str:
+    image = site_image_src(article.get("article_image"), prefix)
     if image:
         return picture_frame(class_name, image, article.get("title"))
     return f'<div class="{class_name} image-placeholder" aria-hidden="true"><span>Image pending</span></div>'
@@ -1984,7 +1888,7 @@ def work_grid_card(article: dict, prefix: str = "") -> str:
 
 def article_card(article: dict, prefix: str = "", featured: bool = False) -> str:
     tags = " ".join(f"<span>{html_escape(tag)}</span>" for tag in article.get("tags", []))
-    image = site_image_asset(article.get("article_image"), prefix, "thumb")
+    image = site_image_src(article.get("article_image"), prefix)
     classes = ["feature-card"]
     if image:
         classes.append("has-image")
@@ -2018,7 +1922,7 @@ def article_card(article: dict, prefix: str = "", featured: bool = False) -> str
 
 
 def article_row(article: dict, prefix: str = "") -> str:
-    image = site_image_asset(article.get("article_image"), prefix, "thumb")
+    image = site_image_src(article.get("article_image"), prefix)
     image_html = (
         picture_frame("archive-image", image, article.get("title"))
         if image
