@@ -709,16 +709,6 @@ def ingest() -> None:
                 }
             )
             continue
-        if not row.keyline:
-            updates.append(
-                {
-                    "rowIndex": row.row_index,
-                    "status": "错误",
-                    "note": append_note(row.notes, "缺少 Keyline"),
-                }
-            )
-            continue
-
         try:
             if row.source_type == "新媒体":
                 title, text = fetch_web_article(row.source)
