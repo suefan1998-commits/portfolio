@@ -5,6 +5,7 @@ __pycache__/
 .env
 .env.*
 !.env*.example
+.local/
 *.pem
 *.key
 id_rsa*

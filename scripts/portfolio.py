@@ -1451,13 +1451,17 @@ def path_inside(child: Path, parent: Path) -> bool:
         return False
 
 
-def icp_beian_html() -> str:
+def site_footer_html() -> str:
     text = config_value(load_env_file(TENCENT_ENV), "ICP_BEIAN_TEXT")
-    if not text:
-        return ""
+    beian = (
+        f'<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{html_escape(text)}</a>'
+        if text
+        else ""
+    )
     return (
         '<footer class="site-footer">'
-        f'<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{html_escape(text)}</a>'
+        '<span class="site-copyright">© 2026 Su FAN. All Rights Reserved.</span>'
+        f'<span class="site-beian">{beian}</span>'
         "</footer>"
     )
 
@@ -1921,7 +1925,8 @@ def article_row(article: dict, prefix: str = "") -> str:
 
 
 def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active: str = "") -> None:
-    footer = icp_beian_html()
+    footer = site_footer_html()
+    page_class = f"page-{path.stem}"
     path.write_text(
         textwrap.dedent(
             f"""\
@@ -1940,7 +1945,7 @@ def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active
                 }})();
               </script>
             </head>
-            <body>
+            <body class="{html_escape(page_class)}">
               {textwrap.dedent(site_nav(asset_prefix, active)).strip()}
               <div class="shell">
                 {textwrap.dedent(body).strip()}
@@ -2208,6 +2213,10 @@ def write_css() -> None:
           color: var(--muted);
           font-size: 13px;
           line-height: 1.6;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
         }
         .site-footer a {
           color: inherit;
@@ -2333,6 +2342,9 @@ def write_css() -> None:
         .about-section {
           padding: 58px 0;
           border-bottom: 1px solid var(--line);
+        }
+        .page-about .about-section:last-child {
+          border-bottom: 0;
         }
         .about-section h2 {
           margin: 0 0 24px;
@@ -2845,6 +2857,12 @@ def write_css() -> None:
             padding-bottom: 2px;
           }
           .shell { width: min(100% - 30px, 1120px); padding-top: 28px; padding-bottom: 72px; }
+          .site-footer {
+            width: min(100% - 30px, 1120px);
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+          }
           .about-hero, .page-title { padding: 42px 0 32px; }
           .about-hero h1, .page-title h1, .article-header h1 { font-size: 34px; line-height: 1.16; }
           .hero-bio { font-size: 16px; line-height: 1.78; }
