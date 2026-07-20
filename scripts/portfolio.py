@@ -1924,9 +1924,18 @@ def article_row(article: dict, prefix: str = "") -> str:
     """
 
 
+def site_css_href(asset_prefix: str) -> str:
+    css_path = PUBLIC / "assets" / "site.css"
+    if not css_path.exists():
+        return f"{asset_prefix}assets/site.css"
+    version = hashlib.sha256(css_path.read_bytes()).hexdigest()[:12]
+    return f"{asset_prefix}assets/site.css?v={version}"
+
+
 def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active: str = "") -> None:
     footer = site_footer_html()
     page_class = f"page-{path.stem}"
+    css_href = site_css_href(asset_prefix)
     path.write_text(
         textwrap.dedent(
             f"""\
@@ -1936,7 +1945,7 @@ def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active
               <meta charset="utf-8">
               <meta name="viewport" content="width=device-width, initial-scale=1">
               <title>{html_escape(title)}</title>
-              <link rel="stylesheet" href="{asset_prefix}assets/site.css">
+              <link rel="stylesheet" href="{html_escape(css_href)}">
               <script>
                 (() => {{
                   const stored = localStorage.getItem("portfolio-theme");
