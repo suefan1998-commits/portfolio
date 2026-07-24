@@ -2390,6 +2390,7 @@ def write_css() -> None:
         }
         .page-about .about-dashboard {
           border-top: 0;
+          border-bottom: 0;
         }
         .about-dashboard div {
           padding: 0 0 18px;
