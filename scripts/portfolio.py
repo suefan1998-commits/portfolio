@@ -1468,17 +1468,30 @@ def path_inside(child: Path, parent: Path) -> bool:
         return False
 
 
-def site_footer_html() -> str:
+def site_footer_html(asset_prefix: str = "") -> str:
     text = config_value(load_env_file(TENCENT_ENV), "ICP_BEIAN_TEXT")
     beian = (
         f'<a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{html_escape(text)}</a>'
         if text
         else ""
     )
+    public_security_icon = site_image_src("备案图标.png", asset_prefix)
+    public_security_icon_html = (
+        f'<img class="beian-icon" src="{html_escape(public_security_icon)}" alt="" loading="lazy">'
+        if public_security_icon
+        else ""
+    )
+    public_security_beian = (
+        '<a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010502061930" '
+        f'rel="noreferrer" target="_blank">{public_security_icon_html}京公网安备11010502061930号</a>'
+    )
+    beian_items = '<span class="beian-separator">｜</span>'.join(
+        item for item in [beian, public_security_beian] if item
+    )
     return (
         '<footer class="site-footer">'
         '<span class="site-copyright">© 2026 Su FAN. All Rights Reserved.</span>'
-        f'<span class="site-beian">{beian}</span>'
+        f'<span class="site-beian">{beian_items}</span>'
         "</footer>"
     )
 
@@ -1950,7 +1963,7 @@ def site_css_href(asset_prefix: str) -> str:
 
 
 def write_html(path: Path, title: str, body: str, asset_prefix: str = "", active: str = "") -> None:
-    footer = site_footer_html()
+    footer = site_footer_html(asset_prefix)
     page_class = f"page-{path.stem}"
     css_href = site_css_href(asset_prefix)
     path.write_text(
@@ -2246,8 +2259,34 @@ def write_css() -> None:
           gap: 24px;
         }
         .site-footer a {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
           color: inherit;
           text-decoration: none;
+        }
+        .site-beian {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          font-size: 12px;
+          line-height: 1.4;
+          letter-spacing: 0.02em;
+        }
+        .site-beian a {
+          line-height: inherit;
+          letter-spacing: inherit;
+        }
+        .beian-separator {
+          color: color-mix(in srgb, var(--muted) 58%, transparent);
+          line-height: 1;
+        }
+        .beian-icon {
+          display: inline-block;
+          width: 13px;
+          height: auto;
+          flex: 0 0 auto;
         }
         .site-footer a:hover {
           color: var(--ink);
@@ -2320,6 +2359,7 @@ def write_css() -> None:
           transition: transform 420ms var(--ease);
         }
         a:hover .image-main,
+        .hero-photo:hover .image-main,
         .feature-image:hover .image-main,
         .archive-image:hover .image-main,
         .grid-image:hover .image-main,
@@ -2354,6 +2394,11 @@ def write_css() -> None:
         .about-dashboard div {
           padding: 0 0 18px;
           border-bottom: 1px solid var(--line);
+          transform-origin: left center;
+          transition: transform 360ms var(--ease);
+        }
+        .about-dashboard div:hover {
+          transform: scale(1.025);
         }
         .page-about .about-dashboard div {
           padding-bottom: 0;

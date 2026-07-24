@@ -256,8 +256,34 @@
           gap: 24px;
         }
         .site-footer a {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
           color: inherit;
           text-decoration: none;
+        }
+        .site-beian {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          font-size: 12px;
+          line-height: 1.4;
+          letter-spacing: 0.02em;
+        }
+        .site-beian a {
+          line-height: inherit;
+          letter-spacing: inherit;
+        }
+        .beian-separator {
+          color: color-mix(in srgb, var(--muted) 58%, transparent);
+          line-height: 1;
+        }
+        .beian-icon {
+          display: inline-block;
+          width: 13px;
+          height: auto;
+          flex: 0 0 auto;
         }
         .site-footer a:hover {
           color: var(--ink);
@@ -330,6 +356,7 @@
           transition: transform 420ms var(--ease);
         }
         a:hover .image-main,
+        .hero-photo:hover .image-main,
         .feature-image:hover .image-main,
         .archive-image:hover .image-main,
         .grid-image:hover .image-main,
@@ -364,6 +391,11 @@
         .about-dashboard div {
           padding: 0 0 18px;
           border-bottom: 1px solid var(--line);
+          transform-origin: left center;
+          transition: transform 360ms var(--ease);
+        }
+        .about-dashboard div:hover {
+          transform: scale(1.025);
         }
         .page-about .about-dashboard div {
           padding-bottom: 0;
